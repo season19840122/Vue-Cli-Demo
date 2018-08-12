@@ -1,0 +1,140 @@
+* {
+  box-sizing: border-box;
+}
+
+img{
+    vertical-align: middle;
+}
+
+a {
+  text-decoration: none;
+  &:hover, &:active {
+    text-decoration: none;
+  }
+}
+
+button {
+  border: 0;
+  outline: 0;
+}
+
+// 去除选中虚线框
+*:focus,
+*:active,
+a:active,
+a:focus,
+input:focus,
+input:active { 
+  -moz-outline-style: none;
+  outline:none;
+  outline: 0;
+  text-decoration: none;
+}
+
+p, ul, h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  padding: 0;
+}
+
+@mixin border-radius($bd:5px){
+  border-radius: $bd;
+}
+
+@mixin linear-gradient($startColor, $endColor, $direction: to bottom ){
+  background: $startColor;
+  background: linear-gradient($direction, $startColor, $endColor); /* Standard syntax */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#000000',GradientType=0 ); /* IE6-9 */
+}
+
+@mixin btn-comm($w:240px, $h:40px){
+  max-width: $w;
+  min-width: $w;
+  height: $h;
+  line-height: $h;
+  display: inline-block;
+  text-align: center;
+  font-family: "Microsoft YaHei";
+}
+
+@mixin txt-comm($w:240px, $h:35px){
+  @include border-radius;
+  padding: 0 5px;
+  min-width: $w - 5*2;
+  height: $h - 2;
+  line-height: $h - 2;
+  font-size: 12px;
+  font-family: 'SimSun';
+  border: 1px solid  #363d46;
+  outline: none;
+}
+
+.button-sure, .button-no{
+  padding: 0;
+  width: 158px;
+  height: 35px;
+  line-height: 35px;
+  color: #271708;
+  border: 0;
+  @include linear-gradient(#c49f58, #c49f58);
+}
+.button-no{
+  color: #271708;
+  @include linear-gradient(#c49f58, #c49f58);
+}
+
+/*容器滚动条*/
+.mainScroll::-webkit-scrollbar{
+  width: 10px;
+  height:10px;
+  border-radius: 5px;
+}
+.mainScroll::-webkit-scrollbar-track{
+  -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.1);
+  border-radius: 5px;
+  background: #000;
+}
+.mainScroll::-webkit-scrollbar-thumb{
+  -webkit-box-shadow: inset 0 0 5px rgba(45,58,72,1);
+  border-radius: 5px;
+  background: #33383e;
+}
+.mainScroll::-webkit-scrollbar-thumb:hover{
+  background: #5b626c;
+}
+.mainScroll::-webkit-scrollbar-thumb:active{
+  background: #4d525a;
+}
+
+/* 列表自定义 webkit 滚动条 */
+.smallScroll::-webkit-scrollbar{
+  width: 6px;
+  height: 66px;
+  border-radius: 5px;
+}
+// 轨道
+.smallScroll::-webkit-scrollbar-track{
+  border-radius: 5px;
+  background: none;
+}
+// 滚动条
+.smallScroll::-webkit-scrollbar-thumb{
+  border-radius: 5px;
+  background: #785a28;
+  &:hover {
+    background: #c8aa6e;
+  }
+  &:active {
+    background: #463714;
+  }
+}
+
+// 多行省略号
+@mixin line-clamp($r: 2) {
+    overflow : hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: $r;
+    -webkit-box-orient: vertical;
+    @content;
+}
+
