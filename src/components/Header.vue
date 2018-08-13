@@ -21,8 +21,7 @@ export default {
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style lang="scss" scoped>
+<style scoped lang="scss">
   .header-wrap {
     height: 80px;
     background: $bg;
@@ -51,7 +50,6 @@ export default {
             background: url(~images/sprite-recycle.png) no-repeat;
             margin-right: 10px;
             vertical-align: -2px;
-            
           }
         }
       }
