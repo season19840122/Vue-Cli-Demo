@@ -3,9 +3,9 @@
     <div class="header">
       <div class="logo"></div>
       <div class="account">
-        <div class="not">
+        <a href="###" class="not">
           <i class="i-account"></i>立即登录
-        </div>
+        </a>
         <div class="login"></div>
       </div>
     </div>
@@ -43,8 +43,15 @@ export default {
         top: 0;
         line-height: 80px;
         .not {
+          color: $c;
           .i-account {
-
+            width: 13px;
+            height: 13px;
+            display: inline-block;
+            background: url(~images/sprite-recycle.png) no-repeat;
+            margin-right: 10px;
+            vertical-align: -2px;
+            
           }
         }
       }

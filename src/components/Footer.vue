@@ -1,15 +1,12 @@
 <template>
-  <div class="hello">
+  <div class="footer-wrap">
     Footer
   </div>
 </template>
 
 <script>
 export default {
-  name: 'Footer',
-  props: {
-    msg: String
-  }
+  name: 'Footer'
 }
 </script>
 
