@@ -1,7 +1,10 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from './views/Home.vue'
-import Account from './views/Account.vue'
+import Home from './views/order/Home.vue'
+import Order from './views/order/Order.vue'
+import Deal from './views/order/Deal.vue'
+import Manage from './views/account/Manage.vue'
+import Account from './views/account/Account.vue'
 
 Vue.use(Router)
 
@@ -11,6 +14,21 @@ export default new Router({
       path: '/',
       name: 'home',
       component: Home
+    },
+    {
+      path: '/order',
+      name: 'order',
+      component: Order
+    },
+    {
+      path: '/deal',
+      name: 'deal',
+      component: Deal
+    },
+    {
+      path: '/manage',
+      name: 'manage',
+      component: Manage
     },
     {
       path: '/account',

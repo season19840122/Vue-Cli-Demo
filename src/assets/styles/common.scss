@@ -2,13 +2,14 @@
   box-sizing: border-box;
 }
 
-img{
-    vertical-align: middle;
+img {
+  vertical-align: middle;
 }
 
 a {
   text-decoration: none;
-  &:hover, &:active {
+  &:hover,
+  &:active {
     text-decoration: none;
   }
 }
@@ -24,9 +25,9 @@ button {
 a:active,
 a:focus,
 input:focus,
-input:active { 
+input:active {
   -moz-outline-style: none;
-  outline:none;
+  outline: none;
   outline: 0;
   text-decoration: none;
 }
@@ -34,52 +35,6 @@ input:active {
 p, ul, h1, h2, h3, h4, h5, h6 {
   margin: 0;
   padding: 0;
-}
-
-@mixin border-radius($bd:5px){
-  border-radius: $bd;
-}
-
-@mixin linear-gradient($startColor, $endColor, $direction: to bottom ){
-  background: $startColor;
-  background: linear-gradient($direction, $startColor, $endColor); /* Standard syntax */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#000000',GradientType=0 ); /* IE6-9 */
-}
-
-@mixin btn-comm($w:240px, $h:40px){
-  max-width: $w;
-  min-width: $w;
-  height: $h;
-  line-height: $h;
-  display: inline-block;
-  text-align: center;
-  font-family: "Microsoft YaHei";
-}
-
-@mixin txt-comm($w:240px, $h:35px){
-  @include border-radius;
-  padding: 0 5px;
-  min-width: $w - 5*2;
-  height: $h - 2;
-  line-height: $h - 2;
-  font-size: 12px;
-  font-family: 'SimSun';
-  border: 1px solid  #363d46;
-  outline: none;
-}
-
-.button-sure, .button-no{
-  padding: 0;
-  width: 158px;
-  height: 35px;
-  line-height: 35px;
-  color: #271708;
-  border: 0;
-  @include linear-gradient(#c49f58, #c49f58);
-}
-.button-no{
-  color: #271708;
-  @include linear-gradient(#c49f58, #c49f58);
 }
 
 /*容器滚动条*/
@@ -128,13 +83,16 @@ p, ul, h1, h2, h3, h4, h5, h6 {
   }
 }
 
-// 多行省略号
-@mixin line-clamp($r: 2) {
-    overflow : hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-line-clamp: $r;
-    -webkit-box-orient: vertical;
-    @content;
+[v-cloak] {
+  display: none;
 }
 
+body {
+  font: 14px/1.5 'Microsoft Yahei';
+  background: #f2f3f5;
+  color: #1b1f33;
+}
+
+#app {
+  
+}

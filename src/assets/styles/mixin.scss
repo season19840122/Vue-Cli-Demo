@@ -1,0 +1,20 @@
+// 圆角
+@mixin border-radius($bd: 5px){
+  border-radius: $bd;
+}
+
+// 多行省略号
+@mixin line-clamp($r: 2) {
+  overflow : hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: $r;
+  -webkit-box-orient: vertical;
+  @content;
+}
+
+// 居中
+@mixin center($w: 1200px) {
+  width: $w;
+  margin: 0 auto;
+}

@@ -1,7 +1,9 @@
+const path = require('path')
+
 module.exports = {
-  baseUrl: process.env.NODE_ENV === 'production' ?
-    '/' :
-    '/',
+  baseUrl: process.env.NODE_ENV === 'production' 
+    ? '/' 
+    : '/',
   devServer: {
     // port: 8001
   },
@@ -38,9 +40,38 @@ module.exports = {
     //   chunks: ['chunk-vendors', 'chunk-common', 'account']
     // }
   },
+  // pluginOptions: {
+  //   'style-resources-loader': {
+  //     'patterns': [
+  //       path.resolve(__dirname, 'src/assets/styles/*.scss')
+  //     ]
+  //   }
+  // },
+  // 每个组件都载入 mixin
+  chainWebpack: config => {
+    const types = ['vue-modules', 'vue', 'normal-modules', 'normal']
+    types.forEach(type => addStyleResource(config.module.rule('scss').oneOf(type)))
+  },
+  // 配置 webpack
   configureWebpack: {
-    // plugins: [
-    //   new MyAwesomeWebpackPlugin()
-    // ]
+    resolve: {
+      alias: {
+        '@': 'D:\\Project\\火马电竞\\2018\\前端 Project\\金币回收\\src',
+        'styles': 'D:\\Project\\火马电竞\\2018\\前端 Project\\金币回收\\src\\assets\\styles',
+        'images': 'D:\\Project\\火马电竞\\2018\\前端 Project\\金币回收\\src\\assets\\images',
+        vue$: 'vue/dist/vue.runtime.esm.js'
+      }
+    }
   }
+}
+
+function addStyleResource (rule) {
+  rule.use('style-resource')
+    .loader('style-resources-loader')
+    .options({
+      patterns: [
+        path.resolve(__dirname, './src/assets/styles/mixin.scss'),
+        path.resolve(__dirname, './src/assets/styles/variable.scss')
+      ]
+    })
 }
