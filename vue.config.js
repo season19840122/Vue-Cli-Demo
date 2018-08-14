@@ -24,8 +24,7 @@ module.exports = {
       // 提取出来的通用 chunk 和 vendor chunk。
       chunks: ['chunk-vendors', 'chunk-common', 'index']
     }
-    // ,
-    // account: {
+    // ,account: {
     //   // account 的入口
     //   entry: 'src/account.js',
     //   // 模板来源
