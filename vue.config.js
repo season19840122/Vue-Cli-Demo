@@ -1,8 +1,8 @@
 const path = require('path')
 
 module.exports = {
-  baseUrl: process.env.NODE_ENV === 'production' 
-    ? '/' 
+  baseUrl: process.env.NODE_ENV === 'production'
+    ? '/'
     : '/',
   devServer: {
     // port: 8001
@@ -55,10 +55,11 @@ module.exports = {
   configureWebpack: {
     resolve: {
       alias: {
-        '@': 'D:\\Project\\火马电竞\\2018\\前端 Project\\金币回收\\src',
-        'styles': 'D:\\Project\\火马电竞\\2018\\前端 Project\\金币回收\\src\\assets\\styles',
-        'images': 'D:\\Project\\火马电竞\\2018\\前端 Project\\金币回收\\src\\assets\\images',
-        vue$: 'vue/dist/vue.runtime.esm.js'
+        '@': '/Users/Season/FindEndorphin/Study/VueJS/Vue-Cli-Demo/src',
+        // '@': 'D:\\Project\\火马电竞\\2018\\前端 Project\\金币回收\\src',
+        vue$: 'vue/dist/vue.runtime.esm.js',
+        'styles': '@/assets/styles',
+        'images': '@/assets/images'
       }
     }
   }
