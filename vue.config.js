@@ -55,8 +55,8 @@ module.exports = {
   configureWebpack: {
     resolve: {
       alias: {
-        '@': '/Users/Season/FindEndorphin/Study/VueJS/Vue-Cli-Demo/src',
-        // '@': 'D:\\Project\\火马电竞\\2018\\前端 Project\\金币回收\\src',
+        // '@': '/Users/Season/FindEndorphin/Study/VueJS/Vue-Cli-Demo/src',
+        '@': 'D:\\Project\\火马电竞\\2018\\前端 Project\\金币回收\\src',
         vue$: 'vue/dist/vue.runtime.esm.js',
         'styles': '@/assets/styles',
         'images': '@/assets/images'

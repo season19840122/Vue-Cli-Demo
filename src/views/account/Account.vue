@@ -1,11 +1,16 @@
 <template>
   <div class="home">
-    Account
+    <Sidebar />
+    <router-view />
   </div>
 </template>
 
 <script>
+import Sidebar from './components/Sidebar'
 export default {
-  name: 'account'
+  name: 'account',
+  components: {
+    Sidebar
+  }
 }
 </script>

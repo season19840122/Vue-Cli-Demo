@@ -3,8 +3,9 @@ import Router from 'vue-router'
 import Home from './views/order/Home.vue'
 import Order from './views/order/Order.vue'
 import Deal from './views/order/Deal.vue'
-import Manage from './views/account/Manage.vue'
 import Account from './views/account/Account.vue'
+import Manage from './views/account/components/Manage.vue'
+import Info from './views/account/components/Info.vue'
 
 Vue.use(Router)
 
@@ -28,14 +29,21 @@ export default new Router({
       component: Deal
     },
     {
-      path: '/manage',
-      name: 'manage',
-      component: Manage
-    },
-    {
       path: '/account',
       name: 'account',
-      component: Account
+      component: Account,
+      children: [
+        {
+          path: 'manage',
+          name: 'manage',
+          component: Manage
+        },
+        {
+          path: 'info',
+          name: 'info',
+          component: Info
+        }
+      ]
       // route level code-splitting
       // this generates a separate chunk (about.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
