@@ -1,12 +1,17 @@
 <template>
   <div class="header-wrap">
     <div class="header">
-      <div class="logo"></div>
+      <router-link to="/" class="logo"></router-link>
       <div class="account">
-        <a href="###" class="not">
+        <a href="###" @click="handleLogin" class="not" v-if="!login">
           <i class="i-account"></i>立即登录
         </a>
-        <div class="login"></div>
+        <div class="login" v-else>
+          <span class="user">HI,{{ name }}</span>
+          <router-link to="/account/info" class="info">个人中心</router-link>
+          <span class="line">|</span>
+          <a href="###" class="exit">退出</a>
+        </div>
       </div>
     </div>
   </div>
@@ -17,6 +22,23 @@ export default {
   name: 'Header',
   props: {
     msg: String
+  },
+  data () {
+    return {
+      login: null,
+      name: null
+    }
+  },
+  mounted () {
+    this.init()
+  },
+  methods: {
+    init () {
+      this.handleLogin()
+    },
+    handleLogin () {
+
+    }
   }
 }
 </script>
@@ -25,6 +47,7 @@ export default {
   .header-wrap {
     height: 80px;
     background: $bg;
+    @include bs;
     .header {
       @include center;
       position: relative;
@@ -34,7 +57,7 @@ export default {
         top: 0;
         width: 209px;
         height: 80px;
-        background: url(~images/logo.png);
+        background: url(~images/logo.png) no-repeat;
       }
       .account {
         position: absolute;
@@ -50,6 +73,24 @@ export default {
             background: url(~images/sprite-recycle.png) no-repeat;
             margin-right: 10px;
             vertical-align: -2px;
+          }
+        }
+        .login {
+          font-size: 14px;
+          .user, .info {
+            color: #212537;
+            margin-right: 30px;
+          }
+          .info {
+            margin-right: 0;
+          }
+          .line {
+            color: #d9dadc;
+            margin-left: 15px;
+            margin-right: 15px;
+          }
+          .exit {
+            color: #ffba66;
           }
         }
       }

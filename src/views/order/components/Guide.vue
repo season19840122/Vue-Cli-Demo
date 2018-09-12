@@ -2,23 +2,25 @@
   <div class="guide-wrap">
     <div class="guide">
       <div class="tab-wrap">
-        <div class="tabbars">
-          <a :href="'#' + item.id"
-            class="tab"
-            :class="{active: index == tabIndex}"
-            v-for="(item, index) of tabs"
-            :key="index"
-            :index="index"
-            @click="handleClick(index, item.id, $event)">
-            {{ item.txt }}
-            <i class="i-bd"></i>
-          </a>
-        </div>
-        <div class="price-wrap">
-          <span class="price">
-            总计获得：<i class="big">21.01</i>元
-          </span>
-          <button class="btn-sale">立即出售</button>
+        <div class="wrap">
+          <div class="tabbars">
+            <a :href="'#' + item.id"
+              class="tab"
+              :class="{active: index == tabIndex}"
+              v-for="(item, index) of tabs"
+              :key="index"
+              :index="index"
+              @click="handleClick(index, item.id, $event)">
+              {{ item.txt }}
+              <i class="i-bd"></i>
+            </a>
+          </div>
+          <div class="price-wrap">
+            <span class="price">
+              总计获得：<strong class="big">21.01</strong>元
+            </span>
+            <button class="btn-sale">立即出售</button>
+          </div>
         </div>
       </div>
       <div class="content-wrap">
@@ -67,7 +69,7 @@
 </template>
 
 <script>
-import $ from 'jquery'
+/* eslint-disable */
 export default {
   name: 'guide',
   data () {
@@ -107,6 +109,7 @@ export default {
       })
     },
     getAnchor (id) {
+      // eslint-disable-next-line
       $('html, body').stop().animate({scrollTop: ($('#' + id).offset().top - 100)}, 1000)
     },
     init () {
@@ -119,12 +122,13 @@ export default {
 }
 </script>
 
-<style scope lang="scss">
+<style scoped lang="scss">
   .guide-wrap {
     background: #ffffff;
     .guide {
       @include center;
       padding: 20px 30px;
+      position: relative;
       .tab-wrap {
         background: #fff;
         &.fixed {
@@ -134,46 +138,70 @@ export default {
           left: 0;
           top: 0;
           z-index: 300;
-          box-shadow: 0 1px 7px rgba(0, 0, 0, 0.07);
-          .tabbars {
-            padding: 20px 30px;
+          @include bs(1px);
+          .wrap {
+            .tabbars {
+              padding: 20px 30px;
+              height: 60px;
+            }
+            .price-wrap {
+              display: block;
+            }
           }
         }
-        .tabbars {
+        .wrap {
           width: 1200px;
-          // padding: 0 30px;
           margin: 0 auto;
-          height: 40px;
-          .tab {
-            font-size: 16px;
-            color: $c;
-            margin-right: 55px;
+          position: relative;
+          .tabbars {
+            width: 1200px;
+            // padding: 0 30px;
+            margin: 0 auto;
             height: 40px;
-            line-height: 30px;
-            display: inline-block;
-            position: relative;
-            &.active {
-              .i-bd {
-                position: absolute;
-                left: 0;
-                bottom: 0;
-                width: 100%;
-                height: 4px;
-                background: #ffd200;
-                @include border-radius(1px);
+            .tab {
+              font-size: 16px;
+              color: $c;
+              margin-right: 55px;
+              height: 40px;
+              line-height: 30px;
+              display: inline-block;
+              position: relative;
+              &.active {
+                .i-bd {
+                  position: absolute;
+                  left: 0;
+                  bottom: 0;
+                  width: 100%;
+                  height: 4px;
+                  background: #ffd200;
+                  @include br(1px);
+                }
               }
             }
           }
-        }
-        .price-wrap {
-          display: none;
-          .price {
-            .big {
-
+          .price-wrap {
+            position: absolute;
+            right: 0;
+            top: 4px;
+            display: none;
+            .price {
+              font-size: 14px;
+              margin-right: 10px;
+              .big {
+                font-size: 24px;
+                color: #ff5436;
+              }
             }
-          }
-          .btn-sale {
-
+            .btn-sale {
+              width: 260px;
+              height: 50px;
+              line-height: 50px;
+              @include br(1px);
+              font-size: 16px;
+              font-weight: bold;
+              background: #ffd200;
+              color: #212537;
+            }
           }
         }
       }
@@ -202,7 +230,7 @@ export default {
                   width: 5px;
                   height: 22px;
                   background: #ffd200;
-                  @include border-radius(1px);
+                  @include br(1px);
                 }
               }
               .content {

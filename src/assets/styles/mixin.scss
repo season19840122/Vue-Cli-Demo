@@ -1,10 +1,17 @@
 // 圆角
-@mixin border-radius($bd: 5px){
-  border-radius: $bd;
+@mixin br ($br: 5px) {
+  border-radius: $br;
+}
+
+// 单行省略号
+@mixin eps () {
+  white-space:nowrap;
+  text-overflow:ellipsis;
+  overflow:hidden;
 }
 
 // 多行省略号
-@mixin line-clamp($r: 2) {
+@mixin line-clamp ($r: 2) {
   overflow : hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
@@ -14,7 +21,23 @@
 }
 
 // 居中
-@mixin center($w: 1200px) {
+@mixin center ($w: 1200px) {
   width: $w;
   margin: 0 auto;
+}
+
+// 边框阴影
+@mixin bs ($v: 0) {
+  box-shadow: 0 $v 7px rgba(0, 0, 0, 0.07);
+}
+
+// 清浮动
+@mixin cf {
+  .cf:before, .cf:after{
+    content: " ";
+    display: table;
+  }
+  .cf:after{
+    clear: both;
+  }
 }

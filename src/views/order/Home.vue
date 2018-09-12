@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="home">
     <SubOrder1 />
     <Guide />
   </div>
@@ -13,6 +13,20 @@ export default {
   components: {
     SubOrder1,
     Guide
+  },
+  mounted () {
+    this.init()
+  },
+  methods: {
+    init () {
+      // eslint-disable-next-line
+      // axios({
+      //   url: '/api/index.json'
+      // }).then(function (res) {
+      //   console.log(res)
+      //   console.log(res.data)
+      // })
+    }
   }
 }
 </script>

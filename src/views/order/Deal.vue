@@ -23,7 +23,7 @@ export default {
 }
 </script>
 
-<style scope lang="scss">
+<style scoped lang="scss">
   .deal {
     .ifr-wrap {
       @include center;
@@ -32,7 +32,7 @@ export default {
       height: 518px;
       margin-top: 30px;
       margin-bottom: 40px;
-      @include border-radius(2px);
+      @include br(2px);
       box-shadow: 0 0 7px rgba(0, 0, 0, 0.07);
       .ifr {
         width: 100%;

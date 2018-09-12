@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="order">
     <SubOrder2 />
     <Guide />
   </div>

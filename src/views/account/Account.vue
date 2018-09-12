@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="account">
     <Sidebar />
     <router-view />
   </div>
@@ -14,3 +14,12 @@ export default {
   }
 }
 </script>
+
+<style scoped lang="scss">
+  .account {
+    @include center;
+    margin-top: 20px;
+    margin-bottom: 100px;
+    overflow: hidden;
+  }
+</style>

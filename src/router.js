@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/order/Home.vue'
+import NotFound from '@/components/NotFound.vue'
 import Order from './views/order/Order.vue'
 import Deal from './views/order/Deal.vue'
 import Account from './views/account/Account.vue'
@@ -30,7 +31,6 @@ export default new Router({
     },
     {
       path: '/account',
-      name: 'account',
       component: Account,
       children: [
         {
@@ -42,12 +42,21 @@ export default new Router({
           path: 'info',
           name: 'info',
           component: Info
+        },
+        {
+          path: '*',
+          redirect: '/'
         }
       ]
       // route level code-splitting
       // this generates a separate chunk (about.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       // component: () => import(/* webpackChunkName: "account" */ './views/Account.vue')
+    },
+    {
+      path: '*',
+      redirect: '/'
+      // component: NotFound
     }
   ]
 })

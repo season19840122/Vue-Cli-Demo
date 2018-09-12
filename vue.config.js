@@ -6,6 +6,16 @@ module.exports = {
     : '/',
   devServer: {
     // port: 8001
+    proxy: {
+      '/api': {
+        target: 'http://localhost:8080',
+        pathRewrite: {
+          '^/api': '/mock' // rewrite path
+        },
+        ws: true,
+        changeOrigin: true
+      }
+    }
   },
   productionSourceMap: false,
   filenameHashing: false,
@@ -19,7 +29,7 @@ module.exports = {
       filename: 'index.html',
       // 当使用 title 选项时，
       // template 中的 title 标签需要是 <title><%= htmlWebpackPlugin.options.title %></title>
-      title: '金币回收填单页',
+      // title: '金币回收填单页',
       // 在这个页面中包含的块，默认情况下会包含
       // 提取出来的通用 chunk 和 vendor chunk。
       chunks: ['chunk-vendors', 'chunk-common', 'index']
@@ -59,7 +69,8 @@ module.exports = {
         '@': 'D:\\Project\\火马电竞\\2018\\前端 Project\\金币回收\\src',
         vue$: 'vue/dist/vue.runtime.esm.js',
         'styles': '@/assets/styles',
-        'images': '@/assets/images'
+        'images': '@/assets/images',
+        'scripts': '@/assets/scripts'
       }
     }
   }
