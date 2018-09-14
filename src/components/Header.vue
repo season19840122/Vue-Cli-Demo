@@ -3,7 +3,7 @@
     <div class="header">
       <router-link to="/" class="logo"></router-link>
       <div class="account">
-        <a href="###" @click="handleLogin" class="not" v-if="!login">
+        <a href="###" @click.prevent="handleLogin" class="not" v-if="!login">
           <i class="i-account"></i>立即登录
         </a>
         <div class="login" v-else>
@@ -34,10 +34,10 @@ export default {
   },
   methods: {
     init () {
-      this.handleLogin()
+
     },
     handleLogin () {
-
+      this.$store.commit('handleModal', 'login')
     }
   }
 }

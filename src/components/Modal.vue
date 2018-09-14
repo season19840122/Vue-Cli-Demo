@@ -10,8 +10,12 @@
           <div class="formitem">
             <input type="text" name="" id="ipt-tel" class="ipt-text" placeholder="请输入手机号">
           </div>
-          <div class="formitem" style="margin-bottom: 0;">
+          <div class="formitem">
             <input type="text" name="" id="ipt-name" class="ipt-text s" placeholder="请输入验证码">
+            <img class="verify s" src="" alt="">
+          </div>
+          <div class="formitem" style="margin-bottom: 0;">
+            <input type="text" name="" id="ipt-name" class="ipt-text s" placeholder="请输入短信验证码">
             <button class="btn-verify s">获取验证码</button>
           </div>
           <div class="formitem" style="margin-bottom: 0;">
@@ -46,7 +50,7 @@
           </div>
           <div class="formitem">
             <button class="btn-verify m">保存</button>
-            <button class="btn-cancle m">取消</button>
+            <button class="btn-cancle m" @click="closeModal">取消</button>
           </div>
         </div>
       </div>
@@ -94,7 +98,7 @@
           </div>
           <div class="formitem">
             <button class="btn-verify m">提现</button>
-            <button class="btn-cancle m">取消</button>
+            <button class="btn-cancle m" @click="closeModal">取消</button>
           </div>
         </div>
       </div>
@@ -115,12 +119,14 @@
 <script>
 export default {
   name: 'modal',
-  props: [
-    'thisModal'
-  ],
   data () {
     return {
       mask: null
+    }
+  },
+  computed: {
+    thisModal () {
+      return this.$store.state.thisModal
     }
   },
   methods: {
@@ -130,7 +136,7 @@ export default {
     },
     closeModal () {
       this.mask = false
-      this.thisModal = ''
+      this.$store.commit('handleModal', null)
     }
   }
 }
@@ -149,7 +155,8 @@ export default {
     background: #000;
     opacity: 0.5;
   }
-  $w: 460px; $h: 402px;
+  $w: 460px;
+  $h: 402px;
   .dialog-wrap {
     position: fixed;
     left: 50%;
@@ -275,7 +282,9 @@ export default {
         }
       }
     }
-    .btn-verify, .btn-cancle, .btn-check {
+    .btn-verify,
+    .btn-cancle,
+    .btn-check {
       float: right;
       width: 340px;
       height: 42px;

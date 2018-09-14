@@ -37,7 +37,7 @@ export default {
   name: 'info',
   data () {
     return {
-      isActive: false
+      isActive: true
     }
   },
   methods: {

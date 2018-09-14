@@ -3,7 +3,7 @@
     <Header />
     <router-view />
     <Footer />
-    <Modal :thisModal="'set1'" />
+    <Modal :thisModal="thisModal" />
   </div>
 </template>
 
@@ -20,6 +20,11 @@ export default {
   },
   data () {
     return {
+    }
+  },
+  computed: {
+    thisModal () {
+	    return this.$store.state.thisModal
     }
   }
 }

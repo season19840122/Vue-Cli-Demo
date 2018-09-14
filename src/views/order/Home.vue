@@ -21,7 +21,7 @@ export default {
     init () {
       // eslint-disable-next-line
       // axios({
-      //   url: '/api/index.json'
+      //   url: 'https://gamebox.swjoy.com/goldOrder/extractQuery'
       // }).then(function (res) {
       //   console.log(res)
       //   console.log(res.data)

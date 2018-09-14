@@ -47,7 +47,7 @@
         <div class="formitem">
           <label for="" class="lbl">到账方式</label>
           <p class="p1">支付宝到账</p>
-          <a href="###" @click="handleSet($event)" class="link">设置</a>
+          <a href="###" @click.prevent="handleSet" class="link">设置</a>
         </div>
         <div class="formitem">
           <label for="" class="lbl">支付宝账号</label>
@@ -74,8 +74,8 @@ export default {
     handleClick () {
       this.$router.push({ path: 'deal' })
     },
-    handleSet ($event) {
-      $event.preventDefault()
+    handleSet () {
+      this.$store.commit('handleModal', 'set')
     }
   }
 }

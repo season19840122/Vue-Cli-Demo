@@ -49,7 +49,11 @@ export default {
   name: 'suborder1',
   methods: {
     handleClick () {
+      // if (login) {
+      //   this.$store.commit('handleModal', 'set')
+      // } else {
       this.$router.push({ path: 'order' })
+      // }
     }
   }
 }

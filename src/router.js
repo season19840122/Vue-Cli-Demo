@@ -1,12 +1,12 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/order/Home.vue'
-import NotFound from '@/components/NotFound.vue'
-import Order from './views/order/Order.vue'
-import Deal from './views/order/Deal.vue'
-import Account from './views/account/Account.vue'
+// import Order from './views/order/Order.vue'
+// import Deal from './views/order/Deal.vue'
+// import Account from './views/account/Account.vue'
 import Manage from './views/account/components/Manage.vue'
 import Info from './views/account/components/Info.vue'
+// import NotFound from '@/components/NotFound.vue'
 
 Vue.use(Router)
 
@@ -17,21 +17,23 @@ export default new Router({
     {
       path: '/',
       name: 'home',
-      component: Home
+      // component: Home
+      component: () => import('./views/order/Home.vue')
     },
     {
       path: '/order',
       name: 'order',
-      component: Order
+      // 懒加载
+      component: () => import('./views/order/Order.vue')
     },
     {
       path: '/deal',
       name: 'deal',
-      component: Deal
+      component: () => import('./views/order/Deal.vue')
     },
     {
       path: '/account',
-      component: Account,
+      component: () => import('./views/account/Account.vue'),
       children: [
         {
           path: 'manage',
@@ -60,3 +62,11 @@ export default new Router({
     }
   ]
 })
+
+// 可以在跳转之前判断跳转的组件的名字并用window.document.title赋值
+// Router
+// beforeEnter: (to, from, next) => {
+//   // window.document.title = to.meta.title
+//   // 使用方法和上面的beforeEach一毛一样
+//   to.push({ path: 'order' })
+// }
