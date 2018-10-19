@@ -13,20 +13,6 @@ export default {
   components: {
     SubOrder1,
     Guide
-  },
-  mounted () {
-    this.init()
-  },
-  methods: {
-    init () {
-      // eslint-disable-next-line
-      // axios({
-      //   url: 'https://gamebox.swjoy.com/goldOrder/extractQuery'
-      // }).then(function (res) {
-      //   console.log(res)
-      //   console.log(res.data)
-      // })
-    }
   }
 }
 </script>

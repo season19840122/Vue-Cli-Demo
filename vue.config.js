@@ -14,7 +14,7 @@ module.exports = {
           '^/api': '/mock' // rewrite path
         },
         ws: true,
-        changeOrigin: true
+        changeOrigin: true // 设置这个参数可以避免跨域
       }
     }
   },

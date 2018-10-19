@@ -1,37 +1,37 @@
 <template>
   <div class="modal-wrap">
-    <div class="masklayer" v-if="mask || thisModal"></div>
+    <div class="masklayer" v-if="mask || currentModal"></div>
     <!-- 登录弹层 -->
-    <div class="dialog-wrap" v-if="thisModal == 'login'">
+    <div class="dialog-wrap" v-if="currentModal == 'login'">
       <i class="i-close" @click="closeModal"></i>
       <h3 class="caption">手机快捷登录</h3>
       <div class="contents">
         <div class="form-wrap">
           <div class="formitem">
-            <input type="text" name="" id="ipt-tel" class="ipt-text" placeholder="请输入手机号">
+            <input type="text" name="" id="ipt-tel" class="ipt-text" :value="tel|num" @keyup="handleTelChange" @blur="handleBlur" placeholder="请输入手机号">
+          </div>
+          <div class="formitem" v-if="show">
+            <input name="" id="ipt-name" class="ipt-text s" v-model.trim="verifycode" placeholder="请输入验证码">
+            <img class="verify s" :src="verifyImg" alt="" @click="handleRefresh" style="background: #fff">
+          </div>
+          <div class="formitem" style="margin-bottom: 0;">
+            <input type="text" name="" id="ipt-name" class="ipt-text s" v-model.trim="sms" placeholder="请输入短信验证码">
+            <button class="btn-verify s" :class="{ 'disable': !flag }" @click="flag && handleCountdown()">{{ countdown }}</button>
+          </div>
+          <div class="formitem" style="margin-bottom: 0; height: 40px;">
+            <p class="p1 error" v-if="error"><i class="i-error"></i>{{ error }}</p>
+          </div>
+          <div class="formitem" style="margin-bottom: 0;">
+            <button class="btn-verify" @click="handleSave">保存</button>
           </div>
           <div class="formitem">
-            <input type="text" name="" id="ipt-name" class="ipt-text s" placeholder="请输入验证码">
-            <img class="verify s" src="" alt="">
-          </div>
-          <div class="formitem" style="margin-bottom: 0;">
-            <input type="text" name="" id="ipt-name" class="ipt-text s" placeholder="请输入短信验证码">
-            <button class="btn-verify s">获取验证码</button>
-          </div>
-          <div class="formitem" style="margin-bottom: 0;">
-            <p class="p1 error"><i class="i-error"></i>手机号码输入错误</p>
-          </div>
-          <div class="formitem" style="margin-bottom: 0;">
-            <button class="btn-verify">保存</button>
-          </div>
-          <div class="formitem">
-            <p class="p1 tc">登录即视为同意<a href="#" target="_blank" class="protocol">《用户使用协议》</a></p>
+            <p class="p1 tc">登录即视为同意<a href="https://passport.kedou.com/front/noLogin/agreeMent.jsp" target="_blank" class="protocol">《用户使用协议》</a></p>
           </div>
         </div>
       </div>
     </div>
     <!-- 提现设置 -->
-    <div class="dialog-wrap set" v-if="thisModal == 'set'">
+    <div class="dialog-wrap set" v-if="currentModal == 'set'">
       <i class="i-close" @click="closeModal"></i>
       <h3 class="caption">设置提现账户</h3>
       <div class="contents">
@@ -56,7 +56,7 @@
       </div>
     </div>
     <!-- 提现 -->
-    <div class="dialog-wrap withdraw" v-if="thisModal == 'withdraw'">
+    <div class="dialog-wrap withdraw" v-if="currentModal == 'withdraw'">
       <i class="i-close" @click="closeModal"></i>
       <div class="contents">
         <div class="form-wrap">
@@ -104,7 +104,7 @@
       </div>
     </div>
     <!-- 查看详情 -->
-    <div class="dialog-wrap check" v-if="thisModal == 'check'">
+    <div class="dialog-wrap check" v-if="currentModal == 'check'">
       <i class="i-close" @click="closeModal"></i>
       <div class="contents">
         <p class="p3">订单交易已完成，请前往订单列表查看。</p>
@@ -121,15 +121,61 @@ export default {
   name: 'modal',
   data () {
     return {
-      mask: null
+      mask: null,
+      tel: '',
+      verifyImg: null,
+      show: false,
+      verifycode: null,
+      sms: null,
+      countdown: '获取验证码',
+      flag: true,
+      error: null
     }
   },
   computed: {
-    thisModal () {
-      return this.$store.state.thisModal
+    currentModal () {
+      return this.$store.state.currentModal
     }
   },
   methods: {
+    getSigncodeCommon () {
+      $axios.signcodeCommon({
+        phone: this.tel
+      }).then(res => {
+        this.verifyImg = `http://www.17uoo.com/Aspx/Common/ValidateImg.aspx?r=${Math.random()}`
+      }).catch(error => {
+        console.log(error)
+      })
+    },
+    getSendPhoneCode () {
+      $axios.sendPhoneCode({
+        phone: this.tel,
+        picCode: this.tel
+      }).then(res => {
+        // countdown
+      }).catch(error => {
+        console.log(error)
+      })
+    },
+    getPhoneLogin () {
+      $axios.phoneLogin({
+        phone: this.tel,
+        gameId: 112561,
+        numCode: this.sms
+      }).then(res => {
+        if (res) {
+          if (res.success) {
+            vm.$store.commit('handleLogin', {
+              isLogin: true,
+              nickname: res.data.nickname
+            })
+            vm.$store.commit('handleModal', null)
+          }
+        }
+      }).catch(error => {
+        console.log(error)
+      })
+    },
     clickCallback (page) {
       console.log(page)
       // $('.guess-wrap>ul').eq(pageNum-1).show().siblings('ul').hide();
@@ -137,6 +183,63 @@ export default {
     closeModal () {
       this.mask = false
       this.$store.commit('handleModal', null)
+    },
+    handleBlur () {
+      var utils = common.utils
+      if (!utils.checkPhone(this.tel)) {
+        this.error = null
+        this.show = true
+        this.verifyImg = `http://www.17uoo.com/Aspx/Common/ValidateImg.aspx?r=${Math.random()}`
+      } else {
+        this.error = utils.checkPhone(this.tel)
+        this.show = false
+        this.verifycode = null
+      }
+    },
+    // 手机号 keyup 事件
+    handleTelChange (e) {
+      this.tel = e.target.value
+      this.$forceUpdate() // 这里必须有
+    },
+    handleRefresh () {
+      this.getSigncodeCommon()
+    },
+    handleCountdown () {
+      if (this.tel && this.verifycode) {
+        // 倒计时
+        this.countdown = 60
+        this.flag = false
+        let t = setInterval(() => {
+          this.countdown--
+          if (this.countdown === 0) {
+            clearInterval(t)
+            this.countdown = '获取验证码'
+            this.flag = true
+          }
+        }, 1000)
+        this.getSendPhoneCode()
+      } else {
+        this.error = '值不能为空，请重填'
+      }
+    },
+    handleSave () {
+      var utils = common.utils, vm = this
+      if (this.tel && this.sms) {
+        if (!utils.checkPhone(this.tel)) {
+          this.error = null
+          this.show = true
+          if (this.verifycode) {
+            // ajax
+            this.getPhoneLogin()
+          } else {
+            this.error = '验证码不能为空，请重填'
+          }
+        } else {
+          this.error = utils.checkPhone(this.tel)
+        }
+      } else {
+        this.error = '值不能为空，请重填'
+      }
     }
   }
 }
@@ -156,7 +259,7 @@ export default {
     opacity: 0.5;
   }
   $w: 460px;
-  $h: 402px;
+  $h: 470px;
   .dialog-wrap {
     position: fixed;
     left: 50%;
@@ -282,9 +385,8 @@ export default {
         }
       }
     }
-    .btn-verify,
-    .btn-cancle,
-    .btn-check {
+    .verify, .btn-verify, .btn-cancle, .btn-check {
+      cursor: pointer;
       float: right;
       width: 340px;
       height: 42px;

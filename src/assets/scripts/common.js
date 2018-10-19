@@ -1,5 +1,5 @@
 /* eslint-disable */
-// import apiList from './interface'
+// import apiList from 'scripts/axios/interface.js'
 
 // 常用业务方法
 var business = {
@@ -70,27 +70,56 @@ var utils = {
     if (r != null) return unescape(r[2]);
     return null; // 返回参数值
   },
+  checkNull(str) {
+    if (!/\s*$/.test(str)) {
+      return '值不能为空，请重填';
+    }
+  },
   checkPhone(phone) {
     if (!/^(0|86|17951)?(13[0-9]|15[012356789]|18[0-9]|14[57]|17[0-9])[0-9]{8}$/.test(phone)) {
-      return '手机号码有误，请重填"';
+      return '手机号码有误，请重填';
     }
   },
   checkQQ(QQ) {
     if (!/^[1-9]\d{4,9}$/.test(phone)) {
-      return 'QQ 有误，请重填"';
+      return 'QQ 有误，请重填';
     }
   },
   checkEmail(email) {
     if (!/^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/.test(phone)) {
-      return 'E-Mail 有误，请重填"';
+      return 'E-Mail 有误，请重填';
     }
   },
-  ajax() {
-    // apiList.query()
-    //   .then(function (res) {
-    //     console.log(res.data)
-    //   })
+  // 将浮点数点左边的数每三位添加一个逗号
+  commafy(num){
+  	return num && num
+  		.toString()
+  		.replace(/(\d)(?=(\d{3})+\.)/g, function($1, $2){
+  			return $2 + ',';
+      });
+    // or 这项黑科技
+    return num && num.toLocaleString('en-US');
+  },
+  // 60 秒倒计时
+  countDown(time) {
+    var flag = setInterval(function(time){
+      time--
+      if(time === 0) {
+        clearInterval(flag)
+        return '获取验证码'
+      }
+      return time
+    }, 1000)
+  },
+  // 判断一个数是另一个数的整数倍
+  isMultiple(value, multiple) {
+    if(value % multiple !== 0) {
+      return `请输入 ${multiple} 的整数倍`
+    } else {
+      return null
+    }
   }
+  // ajax: apiList
 };
 
 var config = {

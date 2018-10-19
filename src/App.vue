@@ -1,9 +1,11 @@
 <template>
   <div id="app" v-cloak>
-    <Header />
-    <router-view />
-    <Footer />
-    <Modal :thisModal="thisModal" />
+      <Header />
+      <keep-alive :include="['home', 'order']">
+        <router-view />
+      </keep-alive>
+      <Footer />
+    <Modal :currentModal="currentModal" />
   </div>
 </template>
 
@@ -23,8 +25,8 @@ export default {
     }
   },
   computed: {
-    thisModal () {
-	    return this.$store.state.thisModal
+    currentModal () {
+	    return this.$store.state.currentModal
     }
   }
 }

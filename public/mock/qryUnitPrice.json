@@ -1,0 +1,10 @@
+{
+  "success": true,
+  "code": 0,
+  "message": "success",
+  "data": {
+      "recyleMaxCnt": "598578",
+      "recyleMinCnt": "3000",
+      "unitPrice": "1"
+  }
+}

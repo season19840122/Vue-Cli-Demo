@@ -9,34 +9,37 @@
         <div class="form-wrap">
           <div class="formitem">
             <label for="ipt-tel" class="lbl">选择区服</label>
-            <div class="picker"></div>
+            <a-cascader :options="options" @change="onChange" placeholder="选择区服" />
           </div>
           <div class="formitem">
             <label for="ipt-way" class="lbl">交易方式</label>
-            <input type="radio" name="" id="ipt-way" class="ipt-radio">
+            <input type="radio" name="" id="ipt-way" class="ipt-radio" checked>
             <p class="p2">拍卖行交易</p>
           </div>
           <div class="grey">
             <div class="formitem">
               <label for="ipt-account" class="lbl">单&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;价</label>
-              <p class="p2"><span class="c1">0.0540</span>元/万金币</p>
+              <p class="p2"><span class="c1">{{ unitPrice }}</span>元/万金币</p>
             </div>
             <div class="formitem">
               <label for="ipt-num" class="lbl">回收数量</label>
-              <input type="text" name="" id="ipt-num" class="ipt-text s">
-              <p class="p2">万金币<span class="c2">(必须是1000的整数倍)</span></p>
+              <input type="text" name="" id="ipt-num" class="ipt-text s" v-model="count" @blur="handleBlur">
+              <p class="p2">万金币
+                <span class="c2">(必须是 1000 的整数倍)</span>
+                <span class="c2" style="color: #ff5436">{{ error }}</span>
+              </p>
             </div>
             <div class="formitem">
               <label for="ipt-num" class="lbl">回收范围</label>
-              <p class="p2">5000-30000万金币</p>
+              <p class="p2">{{ recyleMinCnt }}-{{ recyleMaxCnt }}万金币</p>
             </div>
           </div>
           <div class="formitem">
             <label for="" class="lbl">总计获得</label>
-            <p class="p2"><span class="c3">21.01</span>元</p>
+            <p class="p2"><span class="c3">{{ total }}</span>元</p>
           </div>
           <div class="formitem">
-            <button @click="handleClick" class="btn-verify">立即出售</button>
+            <button @click="handleSale()" class="btn-verify" :class="{disable: isDisable}">立即出售</button>
           </div>
         </div>
       </div>
@@ -47,14 +50,94 @@
 <script>
 export default {
   name: 'suborder1',
-  methods: {
-    handleClick () {
-      // if (login) {
-      //   this.$store.commit('handleModal', 'set')
-      // } else {
-      this.$router.push({ path: 'order' })
-      // }
+  data () {
+    return {
+      options: [],
+      unitPrice: '-',
+      recyleMinCnt: '',
+      recyleMaxCnt: '',
+      count: null,
+      error: null
     }
+  },
+  computed: {
+    total () {
+      if (this.unitPrice > 0 && this.count > 0 && !this.error) {
+        return this.unitPrice * this.count
+      } else {
+        return '-'
+      }
+    },
+    isLogin () {
+      return this.$store.state.loginInfo.isLogin
+    },
+    isDisable () {
+      if (this.isLogin) {
+        if (this.total > 0) {
+          return false
+        } else {
+          return true
+        }
+      }
+    }
+  },
+  methods: {
+    initPage () {
+      this.getServers()
+    },
+    getServers () {
+      $axios.getServers()
+        .then(res => {
+          // console.log(this)
+          if (res) this.options = res
+        })
+    },
+    getQryUnitPrice (value) {
+      $axios.qryUnitPrice({
+        zoneNo: value[0],
+        serverNo: value[1]
+      })
+        .then(res => {
+          if (res.data) {
+            let data = res.data
+            if (data.unitPrice > 0) {
+              this.unitPrice = data.unitPrice
+            }
+            if (data.recyleMinCnt >= 0 && data.recyleMaxCnt >= 0) {
+              this.recyleMinCnt = data.recyleMinCnt
+              this.recyleMaxCnt = data.recyleMaxCnt
+            }
+          }
+        })
+    },
+    handleSale () {
+      if (!this.$store.state.loginInfo.isLogin) {
+        this.$store.commit('handleModal', 'login')
+      } else {
+        if (this.total > 0) {
+          this.$router.push({ path: 'order' })
+        } else {
+          this.isDisable = true
+        }
+      }
+    },
+    onChange (value) {
+      // console.log(value)
+      this.getQryUnitPrice(value)
+    },
+    handleBlur () {
+      if (this.count > 0) {
+        let result = common.utils.isMultiple(this.count, 1000)
+        if (result !== '') {
+          this.error = result
+        }
+      } else {
+        this.error = '请输入正确的回收数量'
+      }
+    }
+  },
+  mounted () {
+    this.initPage()
   }
 }
 </script>
@@ -70,6 +153,8 @@ export default {
     padding: 30px;
     .img-wrap {
       float: left;
+      width: 555px;
+      height: 390px;
     }
     .order-wrap {
       margin-left: 30px;

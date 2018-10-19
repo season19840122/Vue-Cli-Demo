@@ -3,14 +3,14 @@
     <div class="header">
       <router-link to="/" class="logo"></router-link>
       <div class="account">
-        <a href="###" @click.prevent="handleLogin" class="not" v-if="!login">
+        <a href="###" @click.prevent="handleLogin" class="not" v-if="!loginInfo.isLogin">
           <i class="i-account"></i>立即登录
         </a>
         <div class="login" v-else>
-          <span class="user">HI,{{ name }}</span>
+          <span class="user">HI,{{ loginInfo.nickname }}</span>
           <router-link to="/account/info" class="info">个人中心</router-link>
           <span class="line">|</span>
-          <a href="###" class="exit">退出</a>
+          <a href="###" class="exit" @click="handleExit">退出</a>
         </div>
       </div>
     </div>
@@ -25,12 +25,7 @@ export default {
   },
   data () {
     return {
-      login: null,
-      name: null
     }
-  },
-  mounted () {
-    this.init()
   },
   methods: {
     init () {
@@ -38,6 +33,17 @@ export default {
     },
     handleLogin () {
       this.$store.commit('handleModal', 'login')
+    },
+    handleExit () {
+      this.$store.commit('handleExit')
+    }
+  },
+  mounted () {
+    this.init()
+  },
+  computed: {
+    loginInfo () {
+      return this.$store.state.loginInfo
     }
   }
 }

@@ -1,0 +1,39 @@
+{
+  "success": true,
+  "code": 0,
+  "message": null,
+  "data": [
+    {
+      "orderNumber": "13324546456457",
+      "addTime": "2018-08-21 15:35:41",
+      "tranType": "拍卖",
+      "goldOrderCnt": 18000,
+      "orderPrice": 300,
+      "goldRealCnt": 0,
+      "realPrice": 0,
+      "accountNum": "18888888888",
+      "accountName": "陈火荣",
+      "tranStatus": "交易取消",
+      "gameName": "地下城与勇士",
+      "areaName": "广东",
+      "serverName": "广东一区",
+      "arrivePrice": 0
+    },
+    {
+      "orderNumber": "13324546456457",
+      "addTime": "2018-08-21 15:35:41",
+      "tranType": "拍卖",
+      "goldOrderCnt": 18000,
+      "orderPrice": 300,
+      "goldRealCnt": 100,
+      "realPrice": 10,
+      "accountNum": "18888888888",
+      "accountName": "陈火荣",
+      "tranStatus": "交易成功",
+      "gameName": "地下城与勇士",
+      "areaName": "广东",
+      "serverName": "广东一区",
+      "arrivePrice": 8
+    }
+  ]
+}
