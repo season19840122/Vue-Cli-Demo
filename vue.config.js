@@ -12,9 +12,9 @@ module.exports = {
         target: 'http://localhost:8080',
         pathRewrite: {
           '^/api': '/mock' // rewrite path
-        },
-        ws: true,
-        changeOrigin: true // 设置这个参数可以避免跨域
+        }
+        /* ,ws: true,
+        changeOrigin: true // 设置这个参数可以避免跨域 */
       }
     }
   },
@@ -77,6 +77,7 @@ module.exports = {
   }
 }
 
+// 引用公共的 sccs 文件
 function addStyleResource (rule) {
   rule.use('style-resource')
     .loader('style-resources-loader')

@@ -162,19 +162,21 @@ export default {
         phone: this.tel,
         gameId: 112561,
         numCode: this.sms
-      }).then(res => {
-        if (res) {
-          if (res.success) {
-            vm.$store.commit('handleLogin', {
-              isLogin: true,
-              nickname: res.data.nickname
-            })
-            vm.$store.commit('handleModal', null)
-          }
-        }
-      }).catch(error => {
-        console.log(error)
       })
+        .then(res => {
+          // 使用箭头函数可以绑定 this 到 vm 实例
+          if (res) {
+            if (res.success) {
+              this.$store.commit('handleLogin', {
+                isLogin: true,
+                nickname: res.data.nickname
+              })
+              this.$store.commit('handleModal', null)
+            }
+          }
+        }).catch(error => {
+          console.log(error)
+        })
     },
     clickCallback (page) {
       console.log(page)

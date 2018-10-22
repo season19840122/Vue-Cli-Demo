@@ -17,9 +17,9 @@
           </div>
           <div class="price-wrap">
             <span class="price">
-              总计获得：<strong class="big">21.01</strong>元
+              总计获得：<strong class="big">{{ this.$store.state.total }}</strong>元
             </span>
-            <button class="btn-sale">立即出售</button>
+            <button @click="handleSale" class="btn-sale">立即出售</button>
           </div>
         </div>
       </div>
@@ -114,6 +114,19 @@ export default {
     },
     init () {
       this.getFix()
+    },
+    handleSale(){
+      if (!this.$store.state.loginInfo.isLogin) {
+        this.$store.commit('handleModal', 'login')
+      } else {
+        if (this.$store.state.canJump) {
+          this.$router.push({ path: 'order' })
+        } else if(this.$store.state.canJump) {
+          this.$router.push({ path: 'deal' })
+        }
+        // reset
+        this.$store.commit('handleCanJump', false)
+      }
     }
   },
   mounted () {

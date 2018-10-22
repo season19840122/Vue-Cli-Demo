@@ -29,19 +29,23 @@
           <div class="formitem">
             <label for="ipt-role" class="lbl">游戏角色名</label>
             <input type="text" class="ipt-text" id="ipt-role">
+            <span class="c2">{{ error }}</span>
           </div>
           <div class="formitem">
             <label for="ipt-level" class="lbl">角色等级</label>
             <input type="text" class="ipt-text" id="ipt-level">
             <p class="p1">35-90级</p>
+            <span class="c2">{{ error }}</span>
           </div>
           <div class="formitem">
             <label for="ipt-tel" class="lbl">联系手机</label>
             <input type="text" class="ipt-text" id="ipt-tel">
+            <span class="c2">{{ error }}</span>
           </div>
           <div class="formitem">
             <label for="ipt-qq" class="lbl">联系QQ</label>
             <input type="text" class="ipt-text" id="ipt-qq">
+            <span class="c2">{{ error }}</span>
           </div>
         </div>
         <div class="formitem">
@@ -70,6 +74,11 @@
 <script>
 export default {
   name: 'suborder2',
+  data () {
+    return {
+      error: null
+    }
+  },
   methods: {
     handleClick () {
       this.$router.push({ path: 'deal' })
@@ -182,6 +191,11 @@ export default {
             height: 34px;
             line-height: 32px;
           }
+        }
+        .c2 {
+          color: #ff5436;
+          font-size: 12px;
+          margin-left: 5px;
         }
       }
     }

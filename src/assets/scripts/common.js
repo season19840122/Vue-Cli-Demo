@@ -77,17 +77,17 @@ var utils = {
   },
   checkPhone(phone) {
     if (!/^(0|86|17951)?(13[0-9]|15[012356789]|18[0-9]|14[57]|17[0-9])[0-9]{8}$/.test(phone)) {
-      return '手机号码有误，请重填';
+      return '请输入正确的手机号！';
     }
   },
   checkQQ(QQ) {
     if (!/^[1-9]\d{4,9}$/.test(phone)) {
-      return 'QQ 有误，请重填';
+      return '请输入正确的 QQ 号！';
     }
   },
   checkEmail(email) {
     if (!/^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/.test(phone)) {
-      return 'E-Mail 有误，请重填';
+      return '请输入正确的 E-Mail ！';
     }
   },
   // 将浮点数点左边的数每三位添加一个逗号

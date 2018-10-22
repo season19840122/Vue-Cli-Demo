@@ -12,7 +12,8 @@ export default new Vuex.Store({
     },
     currentModal: null,
     total: '-',
-    money: null
+    money: null,
+    canJump: false
   },
   mutations: {
     handleModal (state, name) {
@@ -24,11 +25,15 @@ export default new Vuex.Store({
     handleExit (state) {
       state.loginInfo = {}
     },
-    handleGetTotal (state) {
-
+    handleGetTotal (state, obj) {
+      if (obj.bool) {
+        state.total = obj.val
+      } else {
+        state.money = obj.val
+      }
     },
-    handleGetMoney (state) {
-
+    handleCanJump (state, bool) {
+      state.canJump = bool
     }
   },
   actions: {

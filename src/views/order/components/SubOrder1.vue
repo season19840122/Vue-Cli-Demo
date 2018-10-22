@@ -39,7 +39,7 @@
             <p class="p2"><span class="c3">{{ total }}</span>元</p>
           </div>
           <div class="formitem">
-            <button @click="handleSale()" class="btn-verify" :class="{disable: isDisable}">立即出售</button>
+            <button @click="handleSale" class="btn-verify" :class="{disable: isDisable}">立即出售</button>
           </div>
         </div>
       </div>
@@ -63,6 +63,11 @@ export default {
   computed: {
     total () {
       if (this.unitPrice > 0 && this.count > 0 && !this.error) {
+        // 传入总计获得
+        this.$store.commit('handleGetTotal', {
+          bool: true,
+          val: this.unitPrice * this.count
+        })
         return this.unitPrice * this.count
       } else {
         return '-'
@@ -115,7 +120,10 @@ export default {
         this.$store.commit('handleModal', 'login')
       } else {
         if (this.total > 0) {
+          this.$store.commit('handleCanJump', true)
           this.$router.push({ path: 'order' })
+          // reset
+          this.$store.commit('handleCanJump', false)
         } else {
           this.isDisable = true
         }

@@ -30,6 +30,16 @@ export default {
     }
   }
 }
+
+// 百度统计
+var _hmt = _hmt || [];
+(function () {
+  var hm = document.createElement('script')
+  hm.src = 'https://hm.baidu.com/hm.js?56f4042e545897636028d90833ddedb0'
+  var s = document.getElementsByTagName('script')[0]
+  s.parentNode.insertBefore(hm, s)
+})()
+
 </script>
 
 <style lang="scss">
