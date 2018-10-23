@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import store from './store'
 import Home from './views/order/Home.vue'
 // import Order from './views/order/Order.vue'
 // import Deal from './views/order/Deal.vue'
@@ -10,63 +11,92 @@ import Info from './views/account/components/Info.vue'
 
 Vue.use(Router)
 
-export default new Router({
+const routes = [
+  {
+    path: '/',
+    name: 'home',
+    // component: Home
+    component: () => import('./views/order/Home.vue')
+  },
+  {
+    path: '/order',
+    name: 'order',
+    meta: {
+      requireAuth: true // 添加该字段，表示进入这个路由是需要登录的
+    },
+    // 懒加载
+    component: () => import('./views/order/Order.vue')
+  },
+  {
+    path: '/deal',
+    name: 'deal',
+    meta: {
+      requireAuth: true // 添加该字段，表示进入这个路由是需要登录的
+    },
+    component: () => import('./views/order/Deal.vue')
+  },
+  {
+    path: '/account',
+    name: 'account',
+    meta: {
+      requireAuth: true // 添加该字段，表示进入这个路由是需要登录的
+    },
+    component: () => import('./views/account/Account.vue'),
+    children: [
+      {
+        path: 'manage',
+        name: 'manage',
+        meta: {
+          requireAuth: true // 添加该字段，表示进入这个路由是需要登录的
+        },
+        component: Manage
+      },
+      {
+        path: 'info',
+        name: 'info',
+        meta: {
+          requireAuth: true // 添加该字段，表示进入这个路由是需要登录的
+        },
+        component: Info
+      }
+    ]
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    // component: () => import(/* webpackChunkName: "account" */ './views/Account.vue')
+  }
+]
+
+// 页面刷新时，重新赋值token
+// if (window.localStorage.getItem('token')) {
+//   store.commit(types.LOGIN, window.localStorage.getItem('token'))
+// }
+
+const router = new Router({
   mode: 'history',
   fallback: false,
-  routes: [
-    {
-      path: '/',
-      name: 'home',
-      // component: Home
-      component: () => import('./views/order/Home.vue')
-    },
-    {
-      path: '/order',
-      name: 'order',
-      // 懒加载
-      component: () => import('./views/order/Order.vue')
-    },
-    {
-      path: '/deal',
-      name: 'deal',
-      component: () => import('./views/order/Deal.vue')
-    },
-    {
-      path: '/account',
-      component: () => import('./views/account/Account.vue'),
-      children: [
-        {
-          path: 'manage',
-          name: 'manage',
-          component: Manage
-        },
-        {
-          path: 'info',
-          name: 'info',
-          component: Info
-        },
-        {
-          path: '*',
-          redirect: '/'
-        }
-      ]
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      // component: () => import(/* webpackChunkName: "account" */ './views/Account.vue')
-    },
-    {
-      path: '*',
-      redirect: '/'
-      // component: NotFound
-    }
-  ]
+  routes
 })
 
-// 可以在跳转之前判断跳转的组件的名字并用window.document.title赋值
-// Router
-// beforeEnter: (to, from, next) => {
-//   // window.document.title = to.meta.title
-//   // 使用方法和上面的beforeEach一毛一样
-//   to.push({ path: 'order' })
-// }
+router.beforeEach((to, from, next) => {
+  if (!to.name) {
+    next({
+      path: '/'
+    })
+  }
+  if (to.meta.requireAuth) { // 判断该路由是否需要登录权限
+    // console.log(store.state.token)
+    if (store.state.token) { // 通过 vuex state 获取当前的 token 是否存在
+      next()
+    } else {
+      next({
+        path: '/',
+        query: {redirect: to.fullPath} // 将跳转的路由 path 作为参数，登录成功后跳转到该路由
+      })
+    }
+  } else {
+    next()
+  }
+})
+
+export default router

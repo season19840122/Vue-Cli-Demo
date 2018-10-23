@@ -6,10 +6,8 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     title: 'DNF 金币回收',
-    loginInfo: {
-      // isLogin: null,
-      // nickname: null
-    },
+    token: stores.get('user') || null,
+    loginInfo: stores.get('user') || {},
     currentModal: null,
     total: '-',
     money: null,
@@ -21,9 +19,23 @@ export default new Vuex.Store({
     },
     handleLogin (state, loginInfo) {
       state.loginInfo = loginInfo
+      state.token = loginInfo
+      try {
+        stores.set('user', loginInfo)
+        stores.set('token', loginInfo)
+      } catch (error) {
+        console.log(error)
+      }
     },
     handleExit (state) {
       state.loginInfo = {}
+      state.token = null
+      try {
+        stores.set('user', {})
+        stores.set('token', null)
+      } catch (error) {
+        console.log(error)
+      }
     },
     handleGetTotal (state, obj) {
       if (obj.bool) {

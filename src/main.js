@@ -6,6 +6,8 @@ import '@babel/polyfill'
 import $ from 'jquery'
 import Vue from 'vue'
 import 'es6-promise/auto'
+// store.js
+import 'scripts/stores'
 import Antd from 'ant-design-vue'
 import Paginate from 'vuejs-paginate'
 import App from './App.vue'

@@ -172,9 +172,20 @@ export default {
                 nickname: res.data.nickname
               })
               this.$store.commit('handleModal', null)
+              let redirect = decodeURIComponent(this.$route.query.redirect || '/')
+              this.$router.push({
+                path: redirect
+              })
             }
           }
-        }).catch(error => {
+        })
+        // .then(() => {
+        //   let redirect = decodeURIComponent(this.$route.query.redirect || '/')
+        //   this.$router.push({
+        //     path: redirect
+        //   })
+        // })
+        .catch(error => {
           console.log(error)
         })
     },
@@ -225,7 +236,7 @@ export default {
       }
     },
     handleSave () {
-      var utils = common.utils, vm = this
+      var utils = common.utils
       if (this.tel && this.sms) {
         if (!utils.checkPhone(this.tel)) {
           this.error = null
@@ -370,7 +381,7 @@ export default {
           .ipt-text {
             width: 340px;
             height: 42px;
-            line-height: 40px;
+            line-height: 22px;
             padding: 10px;
             border: 1px solid #d9dade;
             @include br(2px);

@@ -91,6 +91,11 @@ export default {
       ]
     }
   },
+  computed: {
+    isLogin () {
+      return this.$store.state.loginInfo.isLogin
+    },
+  },
   methods: {
     handleClick (index, id, $event) {
       this.tabIndex = index
@@ -116,7 +121,7 @@ export default {
       this.getFix()
     },
     handleSale(){
-      if (!this.$store.state.loginInfo.isLogin) {
+      if (!this.isLogin) {
         this.$store.commit('handleModal', 'login')
       } else {
         if (this.$store.state.canJump) {

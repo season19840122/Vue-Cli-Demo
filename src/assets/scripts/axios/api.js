@@ -3,9 +3,8 @@ import config from './config'
 // import qs from "qs";
 // import Cookies from "js-cookie";
 import router from '@/router'
-
 // 使用 vuex 做全局 loading 时使用
-// import store from '@/store'
+import store from '@/store'
 
 export default function $axios (options) {
   return new Promise((resolve, reject) => {
@@ -43,6 +42,10 @@ export default function $axios (options) {
             config.data = qs.stringify(config.data);
           }
         } */
+        // 判断 token
+        if (store.state.token) {
+          config.headers.Authorization = `${store.state.token}`
+        }
         return config
       },
 
@@ -107,6 +110,18 @@ export default function $axios (options) {
               err.message = '请求错误'
               break
             case 401:
+              /*
+                返回 401 表示前端的 token 已失效
+                当然，你也可以和后端也定其他的方式来表示 token 失效
+                需要前端清除 Vuex 中的 token，页面跳转到登陆页
+              */
+              store.commit(types.LOGOUT)
+              router.replace({
+                path: '/',
+                query: {
+                  redirect: router.currentRoute.fullPath
+                }
+              })
               err.message = '未授权，请登录'
               break
             case 403:

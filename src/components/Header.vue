@@ -27,23 +27,17 @@ export default {
     return {
     }
   },
+  computed: {
+    loginInfo () {
+      return this.$store.state.loginInfo
+    }
+  },
   methods: {
-    init () {
-
-    },
     handleLogin () {
       this.$store.commit('handleModal', 'login')
     },
     handleExit () {
       this.$store.commit('handleExit')
-    }
-  },
-  mounted () {
-    this.init()
-  },
-  computed: {
-    loginInfo () {
-      return this.$store.state.loginInfo
     }
   }
 }
