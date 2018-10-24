@@ -139,7 +139,7 @@ export default {
   },
   methods: {
     getSigncodeCommon () {
-      $axios.signcodeCommon({
+      axios.signcodeCommon({
         phone: this.tel
       }).then(res => {
         this.verifyImg = `http://www.17uoo.com/Aspx/Common/ValidateImg.aspx?r=${Math.random()}`
@@ -148,7 +148,7 @@ export default {
       })
     },
     getSendPhoneCode () {
-      $axios.sendPhoneCode({
+      axios.sendPhoneCode({
         phone: this.tel,
         picCode: this.tel
       }).then(res => {
@@ -158,7 +158,7 @@ export default {
       })
     },
     getPhoneLogin () {
-      $axios.phoneLogin({
+      axios.phoneLogin({
         phone: this.tel,
         gameId: 112561,
         numCode: this.sms
@@ -179,12 +179,6 @@ export default {
             }
           }
         })
-        // .then(() => {
-        //   let redirect = decodeURIComponent(this.$route.query.redirect || '/')
-        //   this.$router.push({
-        //     path: redirect
-        //   })
-        // })
         .catch(error => {
           console.log(error)
         })

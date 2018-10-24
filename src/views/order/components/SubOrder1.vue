@@ -14,7 +14,7 @@
           <div class="formitem">
             <label for="ipt-way" class="lbl">交易方式</label>
             <input type="radio" name="" id="ipt-way" class="ipt-radio" checked>
-            <p class="p2">拍卖行交易</p>
+            <p class="p2">{{ tranType }}</p>
           </div>
           <div class="grey">
             <div class="formitem">
@@ -53,14 +53,21 @@ export default {
   data () {
     return {
       options: [],
+      servers: null,
+      count: null,
+      type: 0,
       unitPrice: '-',
       recyleMinCnt: '',
       recyleMaxCnt: '',
-      count: null,
       error: null
     }
   },
   computed: {
+    tranType () {
+      if (this.type === 0) {
+        return '拍卖交易'
+      }
+    },
     total () {
       if (this.unitPrice > 0 && this.count > 0 && !this.error) {
         // 传入总计获得
@@ -91,14 +98,14 @@ export default {
       this.getServers()
     },
     getServers () {
-      $axios.getServers()
+      axios.getServers()
         .then(res => {
           // console.log(this)
           if (res) this.options = res
         })
     },
     getQryUnitPrice (value) {
-      $axios.qryUnitPrice({
+      axios.qryUnitPrice({
         zoneNo: value[0],
         serverNo: value[1]
       })
@@ -120,6 +127,13 @@ export default {
         this.$store.commit('handleModal', 'login')
       } else {
         if (this.total > 0) {
+          // 报错订单状态
+          this.$store.commit('handleOrders', {
+            servers: this.servers,
+            count: this.count,
+            tranType: this.tranType,
+            total: this.total
+          })
           this.$store.commit('handleCanJump', true)
           this.$router.push({ path: 'order' })
           // reset
@@ -129,8 +143,12 @@ export default {
         }
       }
     },
-    onChange (value) {
-      // console.log(value)
+    onChange (value, selectedOptions) {
+      // 获取区服
+      var arr = selectedOptions.map(n => {
+        return n.label
+      })
+      this.servers = arr
       this.getQryUnitPrice(value)
     },
     handleBlur () {

@@ -126,4 +126,8 @@ var config = {
   GAMEID: 112561 // DNF gameId
 };
 
-export default { business, utils, config };
+export default { 
+  business,
+  utils,
+  config
+};

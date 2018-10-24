@@ -1,4 +1,4 @@
-import axios from './api'
+import axios from './axios'
 
 /**
  * 将所有接口统一起来便于维护

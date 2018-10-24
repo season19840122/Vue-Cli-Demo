@@ -1,6 +1,6 @@
 import store from 'store'
 
-var stores = {
+export default {
   set: function (key, val, exp) {
     // 以天为单位，默认 7 天
     store.set(key, { val: val, exp: exp || 7, time: new Date().getTime() })
@@ -12,5 +12,3 @@ var stores = {
     return info.val
   }
 }
-
-window.stores = stores

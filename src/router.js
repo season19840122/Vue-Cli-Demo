@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import store from './store'
-import Home from './views/order/Home.vue'
+// import Home from './views/order/Home.vue'
 // import Order from './views/order/Order.vue'
 // import Deal from './views/order/Deal.vue'
 // import Account from './views/account/Account.vue'

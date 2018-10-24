@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import stores from 'scripts/stores'
 
 Vue.use(Vuex)
 
@@ -11,7 +12,8 @@ export default new Vuex.Store({
     currentModal: null,
     total: '-',
     money: null,
-    canJump: false
+    canJump: false,
+    orders: stores.get('orders') || {}
   },
   mutations: {
     handleModal (state, name) {
@@ -46,6 +48,14 @@ export default new Vuex.Store({
     },
     handleCanJump (state, bool) {
       state.canJump = bool
+    },
+    handleOrders (state, objOrders) {
+      state.orders = objOrders
+      try {
+        stores.set('orders', objOrders)
+      } catch (error) {
+        console.log(error)
+      }
     }
   },
   actions: {

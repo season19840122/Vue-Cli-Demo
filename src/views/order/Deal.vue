@@ -2,7 +2,7 @@
   <div class="deal">
     <div class="ifr-wrap">
       <iframe class="ifr"
-        src="http://shou.1771.com/soa/tradePageChu.action?sign=6QZN8EzpG6lFm1aH45uGfzCNEgIAfpt0iveCViGamzL%2FZw%2FerBs3Xs1K3uQrnnXPsyvtIEffbas%3D"
+        src="http://zhifu.17uoo.com/Customer/SellGoldOrderV3.html"
         marginwidth="0"
         marginheight="0"
         frameborder="0"
@@ -19,6 +19,24 @@ export default {
   name: 'deal',
   components: {
     Guide
+  },
+  methods: {
+    init () {
+      function receiveMessageFromIframePage (event) {
+        // console.log(event.data);
+        if (event.origin !== 'http://127.0.0.1:8082') return
+        if (event.data === 'success') {
+          alert('Success')
+        } else {
+          console.log(event.data)
+        }
+      }
+
+      window.addEventListener('message', receiveMessageFromIframePage, false)
+    }
+  },
+  mounted () {
+    this.init()
   }
 }
 </script>

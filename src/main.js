@@ -6,15 +6,13 @@ import '@babel/polyfill'
 import $ from 'jquery'
 import Vue from 'vue'
 import 'es6-promise/auto'
-// store.js
-import 'scripts/stores'
 import Antd from 'ant-design-vue'
 import Paginate from 'vuejs-paginate'
 import App from './App.vue'
 import router from './router'
 import store from './store'
 // 独立成一个文件，或者放在 common 里
-import apiList from 'scripts/axios/interface'
+import axios from 'scripts/axios/interface'
 import common from 'scripts/common'
 import 'scripts/vue-filter'
 
@@ -30,12 +28,16 @@ Vue.component('paginate', Paginate)
 
 // 全局挂载
 window.$ = $
-window.$axios = apiList
+window.axios = axios
 window.common = common
 // console.log(common)
+
+// 方法二：将 axios 挂载到 prototype 上，在组件中可以直接使用 this.axios 访问
+// Vue.prototype.axios = apiList;
 
 new Vue({
   router,
   store,
+  // axios,
   render: h => h(App)
 }).$mount('#app')

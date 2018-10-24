@@ -5,20 +5,20 @@
       <div class="form-wrap">
         <div class="formitem">
           <label for="" class="lbl">游戏区服</label>
-          <p class="p1">地下城与勇士/广东/广东1</p>
+          <p class="p1">{{ orders.servers.join('/') }}</p>
           <router-link to="/" class="link">返回修改&gt;&gt;</router-link>
         </div>
         <div class="formitem">
           <label for="" class="lbl">回收数量</label>
-          <p class="p1"><span class="c1">15000</span>万金币</p>
+          <p class="p1"><span class="c1">{{ orders.count }}</span>万金币</p>
         </div>
         <div class="formitem">
           <label for="ipt-num" class="lbl">交易类型</label>
-          <p class="p1">拍卖交易</p>
+          <p class="p1">{{ orders.tranType }}</p>
         </div>
         <div class="formitem">
           <label for="ipt-num" class="lbl">预计获得</label>
-          <p class="p1"><span class="c1">293.18</span>元</p>
+          <p class="p1"><span class="c1">{{ orders.total }}</span>元</p>
         </div>
       </div>
     </div>
@@ -77,6 +77,11 @@ export default {
   data () {
     return {
       error: null
+    }
+  },
+  computed: {
+    orders () {
+      return this.$store.state.orders
     }
   },
   methods: {
@@ -159,6 +164,8 @@ export default {
     }
     .link {
       margin-left: 14px;
+      height: 34px;
+      line-height: 34px;
       color: #80a9df;
     }
     .form-wrap {
