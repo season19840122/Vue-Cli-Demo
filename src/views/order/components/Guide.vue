@@ -15,11 +15,17 @@
               <i class="i-bd"></i>
             </a>
           </div>
-          <div class="price-wrap">
+          <div class="price-wrap" v-if="isIndex">
             <span class="price">
               总计获得：<strong class="big">{{ this.$store.state.total }}</strong>元
             </span>
             <button @click="handleSale" class="btn-sale">立即出售</button>
+          </div>
+          <div class="price-wrap" v-else>
+            <span class="price">
+              总计获得：<strong class="big">{{ this.$store.state.money }}</strong>元
+            </span>
+            <button @click="handleRecyle" class="btn-sale">确认回收</button>
           </div>
         </div>
       </div>
@@ -95,6 +101,9 @@ export default {
     isLogin () {
       return this.$store.state.loginInfo.isLogin
     },
+    isIndex(){
+      return this.$route.path === '/' 
+    }
   },
   methods: {
     handleClick (index, id, $event) {
@@ -121,6 +130,19 @@ export default {
       this.getFix()
     },
     handleSale(){
+      if (!this.isLogin) {
+        this.$store.commit('handleModal', 'login')
+      } else {
+        if (this.$store.state.canJump) {
+          this.$router.push({ path: 'order' })
+        } else if(this.$store.state.canJump) {
+          this.$router.push({ path: 'deal' })
+        }
+        // reset
+        this.$store.commit('handleCanJump', false)
+      }
+    },
+    handleRecyle(){
       if (!this.isLogin) {
         this.$store.commit('handleModal', 'login')
       } else {

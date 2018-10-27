@@ -17,15 +17,15 @@
         </div>
         <div class="formitem">
           <label for="ipt-account" class="lbl">支付宝账户</label>
-          <input type="text" name="" id="ipt-account" class="ipt-text">
+          <input type="text" name="" id="ipt-account" class="ipt-text" v-model="alipay.accountNum">
         </div>
         <div class="formitem">
           <label for="ipt-name" class="lbl">支付宝姓名</label>
-          <input type="text" name="" id="ipt-name" class="ipt-text">
+          <input type="text" name="" id="ipt-name" class="ipt-text" v-model="alipay.accountName">
         </div>
         <div class="formitem">
           <label for="" class="lbl"></label>
-          <button class="btn-save">保存</button>
+          <button class="btn-save" @click="saveAlipay">保存</button>
         </div>
       </div>
     </div>
@@ -37,39 +37,31 @@ export default {
   name: 'info',
   data () {
     return {
-      isActive: true
+      isActive: true,
+      loginInfo: this.$store.state.loginInfo
+    }
+  },
+  computed: {
+    alipay () {
+      return this.$store.state.alipay
     }
   },
   methods: {
     handleClick () {
-      // async demo
-      /*  function timeout (ms) {
-        return new Promise((resolve) => {
-          setTimeout(resolve, ms)
-        })
-      }
-      async function asyncPrint (value, ms) {
-        await timeout(ms)
-        console.log(value)
-      }
-      asyncPrint('hello world', 50) */
-
-      // axios({
-      //   url: '/api/index.json'
-      // }).then(function (res) {
-      //   console.log(res.data)
-      // }).then(function (res) {
-      //   console.log(res.data)
-      // })
-
-      // fetch('/api/index.json').then(response => response.json())
-      //   .then(data => console.log(data))
-      //   .catch(e => console.log('Oops, error', e))
-
-      // api.ajax()
-
       this.isActive = !this.isActive
+    },
+    getAlipay () {
+      this.$store.commit('handleAlipay')
+    },
+    saveAlipay () {
+      this.$store.commit('handleAlipay', this.alipay)
+    },
+    init () {
+      this.getAlipay()
     }
+  },
+  mounted () {
+    this.init()
   }
 }
 </script>

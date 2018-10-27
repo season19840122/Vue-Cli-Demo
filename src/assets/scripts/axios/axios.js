@@ -115,7 +115,7 @@ export default function $axios (options) {
                 当然，你也可以和后端也定其他的方式来表示 token 失效
                 需要前端清除 Vuex 中的 token，页面跳转到登陆页
               */
-              store.commit(types.LOGOUT)
+              // store.commit(types.LOGOUT)
               router.replace({
                 path: '/',
                 query: {

@@ -42,14 +42,14 @@
           </div>
           <div class="formitem">
             <label for="ipt-account" class="lbl">支付宝账户</label>
-            <input type="text" name="" id="ipt-account" class="ipt-text m" placeholder="">
+            <input type="text" name="" id="ipt-account" class="ipt-text m" placeholder="" v-model="withdraw.accountNum">
           </div>
           <div class="formitem">
             <label for="ipt-name" class="lbl">支付宝姓名</label>
-            <input type="text" name="" id="ipt-name" class="ipt-text m" placeholder="">
+            <input type="text" name="" id="ipt-name" class="ipt-text m" placeholder="" v-model="withdraw.accountName">
           </div>
           <div class="formitem">
-            <button class="btn-verify m">保存</button>
+            <button class="btn-verify m" @click="saveAlipay">保存</button>
             <button class="btn-cancle m" @click="closeModal">取消</button>
           </div>
         </div>
@@ -62,27 +62,27 @@
         <div class="form-wrap">
           <div class="formitem">
             <label for="ipt-tel" class="lbl">订单号</label>
-            <p class="p2">Sale201808011212kws21k</p>
+            <p class="p2">{{ withdraw.orderNumber }}</p>
           </div>
           <div class="formitem">
             <label for="ipt-tel" class="lbl">游戏区服</label>
-            <p class="p2">地下城与勇士/广东/广东1</p>
+            <p class="p2">{{ withdraw.gameName }}/{{ withdraw.areaName }}/{{ withdraw.serverName }}</p>
           </div>
           <div class="formitem">
-            <label for="ipt-tel" class="lbl">实际回收数量</label>
-            <p class="p2"><span class="c1">15000</span>万金币</p>
+            <label for="ipt-tel" class="lbl">成交数量</label>
+            <p class="p2"><span class="c1">{{ withdraw.goldRealCnt }}</span>万金币</p>
           </div>
           <div class="formitem">
-            <label for="ipt-tel" class="lbl">回收金额</label>
-            <p class="p2">293.18元</p>
+            <label for="ipt-tel" class="lbl">成交金额</label>
+            <p class="p2">{{ withdraw.goldRealCnt }}元</p>
           </div>
           <div class="formitem">
             <label for="ipt-tel" class="lbl">手续费</label>
-            <p class="p2">8.00元</p>
+            <p class="p2">{{ withdraw.commissionPrice }}元</p>
           </div>
           <div class="formitem">
             <label for="ipt-tel" class="lbl">到账金额</label>
-            <p class="p2"><span class="c1">285.18</span>元</p>
+            <p class="p2"><span class="c1">{{ withdraw.arrivePrice }}</span>元</p>
           </div>
           <div class="formitem" style="margin-bottom: 10px;">
             <label for="ipt-tel" class="lbl">提现方式</label>
@@ -90,14 +90,14 @@
           </div>
           <div class="formitem" style="margin-bottom: 20px;">
             <label for="ipt-account" class="lbl">支付宝账户</label>
-            <input type="text" name="" id="ipt-account" class="ipt-text m" placeholder="">
+            <input type="text" name="" id="ipt-account" class="ipt-text m" placeholder="" v-model="withdraw.accountNum">
           </div>
           <div class="formitem" style="margin-bottom: 20px;">
             <label for="ipt-name" class="lbl">支付宝姓名</label>
-            <input type="text" name="" id="ipt-name" class="ipt-text m" placeholder="">
+            <input type="text" name="" id="ipt-name" class="ipt-text m" placeholder="" v-model="withdraw.accountName">
           </div>
           <div class="formitem">
-            <button class="btn-verify m">提现</button>
+            <button class="btn-verify m" @click="handleWithdraw(withdraw.orderNumber)">提现</button>
             <button class="btn-cancle m" @click="closeModal">取消</button>
           </div>
         </div>
@@ -135,6 +135,12 @@ export default {
   computed: {
     currentModal () {
       return this.$store.state.currentModal
+    },
+    withdraw () {
+      return this.$store.state.withdraw
+    },
+    alipay () {
+      return this.$store.state.alipay
     }
   },
   methods: {
@@ -158,30 +164,30 @@ export default {
       })
     },
     getPhoneLogin () {
-      axios.phoneLogin({
+      /* axios.phoneLogin({
         phone: this.tel,
-        gameId: 112561,
-        numCode: this.sms
+        numCode: this.sms,
+        url: 'https://localhost:8080'
       })
-        .then(res => {
-          // 使用箭头函数可以绑定 this 到 vm 实例
-          if (res) {
-            if (res.success) {
-              this.$store.commit('handleLogin', {
-                isLogin: true,
-                nickname: res.data.nickname
-              })
-              this.$store.commit('handleModal', null)
-              let redirect = decodeURIComponent(this.$route.query.redirect || '/')
-              this.$router.push({
-                path: redirect
-              })
-            }
+      .then(res => {
+      // console.log(res)
+      // 使用箭头函数可以绑定 this 到 vm 实例
+        if (res) {
+          if (res.success) {
+            this.$store.commit('handleLogin', {
+              isLogin: true,
+              nickname: res.data.nickname
+            })
+            this.$store.commit('handleModal', null)
+            let redirect = decodeURIComponent(this.$route.query.redirect || '/')
+            this.$router.push({
+              path: redirect
+            })
           }
-        })
-        .catch(error => {
-          console.log(error)
-        })
+        }
+      }) */
+
+      document.location.href = `https://gamebox.swjoy.com/phoneLogin?phone=${this.tel}&numCode=${this.sms}&url=http://localhost:8080`
     },
     clickCallback (page) {
       console.log(page)
@@ -247,7 +253,27 @@ export default {
       } else {
         this.error = '值不能为空，请重填'
       }
+    },
+    saveAlipay () {
+      this.$store.commit('handleAlipay', this.alipay)
+    },
+    handleWithdraw (orderNumber) {
+      axios.extractSmt({
+        orderNumber: orderNumber
+      }).then(res => {
+        if (res) {
+          if (res.success) {
+            this.$message.success('提现成功')
+            this.closeModal()
+            this.saveAlipay()
+          } else {
+            this.$message.error(res.message)
+          }
+        }
+      })
     }
+  },
+  mounted () {
   }
 }
 </script>

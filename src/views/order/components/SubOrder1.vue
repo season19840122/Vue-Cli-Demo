@@ -132,7 +132,8 @@ export default {
             servers: this.servers,
             count: this.count,
             tranType: this.tranType,
-            total: this.total
+            total: this.total,
+            tel: this.tel
           })
           this.$store.commit('handleCanJump', true)
           this.$router.push({ path: 'order' })

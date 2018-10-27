@@ -5,27 +5,11 @@ import axios from './axios'
  * 如果项目很大可以将 url 独立成文件，接口分成不同的模块
  */
 
-// 单独导出
-/* export const list = id => {
-  return axios({
-    url: `/list${id}`,
-    method: 'get'
-  })
-}
-
-export const upload = data => {
-  return axios({
-    url: '/upload',
-    method: 'post',
-    data
-  })
-} */
-
 // 图形验证码
 const signcodeCommon = data => {
   return axios({
-    method: 'get',
-    url: 'https://gamebox.swjoy.com/signcodeCommon/get',
+    method: 'post',
+    url: '/signcodeCommon/get',
     params: data
   })
 }
@@ -34,8 +18,9 @@ const signcodeCommon = data => {
 const phoneLogin = data => {
   return axios({
     // url: `/api/phoneLogin.json?${data}`,
-    method: 'get',
-    url: `/api/phoneLogin.json`,
+    method: 'post',
+    // url: `/api/phoneLogin.json`,
+    url: `/api/phoneLogin`,
     params: data
   })
 }
@@ -43,8 +28,8 @@ const phoneLogin = data => {
 // 下发短信验证码
 const sendPhoneCode = data => {
   return axios({
-    method: 'get',
-    url: `/api/sendPhoneCode.json`,
+    method: 'post',
+    url: `/sendPhoneCode`,
     params: data
   })
 }
@@ -53,24 +38,24 @@ const sendPhoneCode = data => {
 const getServers = () => {
   return axios({
     method: 'get',
-    url: `/api/getServers.json`
+    url: `/mock/getServers.json`
   })
 }
 
-// 下发短信验证码
+// 获取单价
 const qryUnitPrice = data => {
   return axios({
-    method: 'get',
-    url: `/api/qryUnitPrice.json`,
+    method: 'post',
+    url: `/goldOrder/qryUnitPrice`,
     params: data
   })
 }
 
-// 下发短信验证码
+// 订单管理
 const orderManager = data => {
   return axios({
-    method: 'get',
-    url: `/api/orderManager.json`,
+    method: 'post',
+    url: `/goldOrder/orderManager`,
     params: data
   })
 }

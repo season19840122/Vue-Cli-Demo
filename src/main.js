@@ -7,12 +7,13 @@ import $ from 'jquery'
 import Vue from 'vue'
 import 'es6-promise/auto'
 import Antd from 'ant-design-vue'
-import Paginate from 'vuejs-paginate'
+// import Paginate from 'vuejs-paginate'
 import App from './App.vue'
 import router from './router'
 import store from './store'
 // 独立成一个文件，或者放在 common 里
-import axios from 'scripts/axios/interface'
+// import axios from 'scripts/axios/interface' // 线上
+import axios from 'scripts/axios/json' // 本地
 import common from 'scripts/common'
 import 'scripts/vue-filter'
 
@@ -22,9 +23,9 @@ Vue.use(Antd)
 // Auto polyfill，按照 vuex 的说法只需要引入即可 import 'es6-promise/auto'
 // 官方没有 ES6 的写法，只有 require('es6-promise').polyfill()
 // promise.polyfill()
-Vue.config.productionTip = false
+
 // 初始化分页组件
-Vue.component('paginate', Paginate)
+// Vue.component('paginate', Paginate)
 
 // 全局挂载
 window.$ = $

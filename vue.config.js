@@ -4,17 +4,21 @@ module.exports = {
   baseUrl: process.env.NODE_ENV === 'production'
     ? '/'
     : '/',
+  // devServer: {
+  //   proxy: 'https://gamebox.swjoy.com'
+  // },
   devServer: {
     // port: 8001
     historyApiFallback: true,
-    proxy: {
-      '/api': {
+    // proxy: 'https://gamebox.swjoy.com', // 线上
+    proxy: { // 本地，设置这个参数可以避免跨域
+      '/api': { // 这个表示 target 下的路径，如果后端路径没有叫这个建议直接设置 proxy: 'https://gamebox.swjoy.com'
         target: 'http://localhost:8080',
         pathRewrite: {
           '^/api': '/mock' // rewrite path
         }
-        /* ,ws: true,
-        changeOrigin: true // 设置这个参数可以避免跨域 */
+        // ,ws: true,
+        // changeOrigin: true
       }
     }
   },

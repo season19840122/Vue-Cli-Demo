@@ -3,7 +3,7 @@
     <div class="logo-wrap">
       <img class="logo" src="~images/head.png" alt="">
     </div>
-    <p class="name eps">SJ_15888863973</p>
+    <p class="name eps">{{ loginInfo.nickname }}</p>
     <div class="menu-wrap">
       <ul>
         <li v-for="(item, index) of menu" :key="index" :class="{ active: index == thisIndex }">
@@ -35,6 +35,11 @@ export default {
         }
       ],
       thisIndex: 0
+    }
+  },
+  computed: {
+    loginInfo () {
+      return this.$store.state.loginInfo
     }
   },
   mounted () {

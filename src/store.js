@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import stores from 'scripts/stores'
 
 Vue.use(Vuex)
+var app = new Vue({})
 
 export default new Vuex.Store({
   state: {
@@ -13,7 +14,11 @@ export default new Vuex.Store({
     total: '-',
     money: null,
     canJump: false,
-    orders: stores.get('orders') || {}
+    orders: stores.get('orders') || {},
+    withdraw: stores.get('withdraw') || {},
+    alipay: stores.get('alipay') || {},
+    details: [],
+    page: {}
   },
   mutations: {
     handleModal (state, name) {
@@ -56,6 +61,57 @@ export default new Vuex.Store({
       } catch (error) {
         console.log(error)
       }
+    },
+    handleWithdraw (state, withdraw) {
+      state.withdraw = withdraw
+      try {
+        stores.set('withdraw', withdraw)
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    handleAlipay (state, alipay) {
+      let obj = {}, promiss
+      if (alipay) { // 设置
+        obj = {
+          accountNum: alipay.accountNum,
+          accountName: alipay.accountName,
+          accountType: '支付宝'
+        }
+        promiss = axios.reflectAccount(obj)
+          .then(res => {
+            if (res && res.success) {
+              state.alipay = alipay
+              app.$message.success('保存成功')
+            } else {
+              app.$message.error(res.message)
+            }
+          })
+      } else { // 查询
+        obj = {
+          accountNum: state.loginInfo.tel
+        }
+        promiss = axios.reflectAccount(obj)
+          .then(res => {
+            if (res && res.success) {
+              state.alipay = res.data
+            }
+          })
+      }
+
+      promiss.then(() => {
+        try {
+          stores.set('alipay', state.alipay)
+        } catch (error) {
+          console.log(error)
+        }
+      })
+    },
+    handlePage (state, page) {
+      state.page = page
+    },
+    handleDetails (state, details) {
+      state.details = details
     }
   },
   actions: {

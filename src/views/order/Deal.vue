@@ -24,7 +24,7 @@ export default {
     init () {
       function receiveMessageFromIframePage (event) {
         // console.log(event.data);
-        if (event.origin !== 'http://127.0.0.1:8082') return
+        if (event.origin !== 'http://zhifu.17uoo.com') return
         if (event.data === 'success') {
           alert('Success')
         } else {
@@ -47,7 +47,7 @@ export default {
       @include center;
       padding: 30px 0;
       background: #fff;
-      height: 518px;
+      height: 530px;
       margin-top: 30px;
       margin-bottom: 40px;
       @include br(2px);

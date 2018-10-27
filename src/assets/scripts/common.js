@@ -80,8 +80,8 @@ var utils = {
       return '请输入正确的手机号！';
     }
   },
-  checkQQ(QQ) {
-    if (!/^[1-9]\d{4,9}$/.test(phone)) {
+  checkQQ(qq) {
+    if (!/^[1-9]\d{4,9}$/.test(qq)) {
       return '请输入正确的 QQ 号！';
     }
   },

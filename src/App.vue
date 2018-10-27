@@ -28,6 +28,37 @@ export default {
     currentModal () {
 	    return this.$store.state.currentModal
     }
+  },
+  methods: {
+    getLogin () {
+      // 本地模拟
+      this.$store.commit('handleLogin', {
+        isLogin: true,
+        nickname: '火荣',
+        tel: '18888888888'
+      })
+
+      // 线上
+      /* let obj = this.$route.query
+      if (obj.nickName) {
+        this.$store.commit('handleLogin', {
+          isLogin: true,
+          nickname: obj.nickName,
+          tel: obj.phone
+        })
+        this.$store.commit('handleModal', null)
+        let redirect = decodeURIComponent(this.$route.query.redirect || '/')
+        this.$router.push({
+          path: redirect
+        })
+      } */
+    },
+    init () {
+      this.getLogin()
+    }
+  },
+  mounted () {
+    this.init()
   }
 }
 
@@ -43,4 +74,7 @@ var _hmt = _hmt || [];
 </script>
 
 <style lang="scss">
+[v-cloak] {
+  display: none;
+}
 </style>

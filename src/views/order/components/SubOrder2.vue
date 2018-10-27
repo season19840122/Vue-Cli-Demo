@@ -28,24 +28,30 @@
         <div class="black">
           <div class="formitem">
             <label for="ipt-role" class="lbl">游戏角色名</label>
-            <input type="text" class="ipt-text" id="ipt-role">
-            <span class="c2">{{ error }}</span>
+            <input type="text" class="ipt-text" id="ipt-role" v-model="role">
+            <span class="c2" v-show="!role">请输入角色名！</span>
           </div>
           <div class="formitem">
             <label for="ipt-level" class="lbl">角色等级</label>
-            <input type="text" class="ipt-text" id="ipt-level">
+            <input type="text" class="ipt-text" id="ipt-level" v-model="level">
             <p class="p1">35-90级</p>
-            <span class="c2">{{ error }}</span>
+            <span class="c2" v-show="verifyLevel">请输入35-90的数字！</span>
           </div>
           <div class="formitem">
             <label for="ipt-tel" class="lbl">联系手机</label>
-            <input type="text" class="ipt-text" id="ipt-tel">
-            <span class="c2">{{ error }}</span>
+            <input type="text" class="ipt-text" id="ipt-tel" v-model="orders.tel || null">
+            <span class="c2" v-show="verifyTel">请输入正确的手机号！</span>
           </div>
           <div class="formitem">
             <label for="ipt-qq" class="lbl">联系QQ</label>
-            <input type="text" class="ipt-text" id="ipt-qq">
-            <span class="c2">{{ error }}</span>
+            <input type="text" class="ipt-text" id="ipt-qq" v-model="qq">
+            <span class="c2" v-show="verifyQQ">请输入正确的QQ号！</span>
+          </div>
+          <div class="formitem">
+            <label for="ipt-qq" class="lbl">验证码</label>
+            <input name="" id="ipt-name" class="ipt-text s" v-model.trim="verifycode" placeholder="请输入验证码">
+            <img class="verify s" :src="verifyImg" alt="" @click="handleRefresh" style="background: #fff">
+            <span class="c2">请输入验证码！</span>
           </div>
         </div>
         <div class="formitem">
@@ -55,17 +61,17 @@
         </div>
         <div class="formitem">
           <label for="" class="lbl">支付宝账号</label>
-          <p class="p1">158******73</p>
+          <p class="p1">{{ alipay.accountNum }}</p>
         </div>
         <div class="formitem">
           <label for="" class="lbl">支付宝姓名</label>
-          <p class="p1">**雅</p>
+          <p class="p1">{{ alipay.accountName }}</p>
         </div>
       </div>
     </div>
     <div class="btn-wrap">
-      <p class="p2">实际到账金额<span class="c2"><strong>293.18</strong>元</span></p>
-      <p class="p3">其中提现手续费为8.00元</p>
+      <p class="p2">实际到账金额<span class="c2"><strong>{{ money }}</strong>元</span></p>
+      <p class="p3">其中提现手续费为{{ fee }}元</p>
       <button @click="handleClick" class="btn-confirm">确认回收</button>
     </div>
   </div>
@@ -76,12 +82,43 @@ export default {
   name: 'suborder2',
   data () {
     return {
-      error: null
+      error: null,
+      role: null,
+      level: null,
+      qq: null,
+      verifyImg: null,
+      verifycode: null,
+      loginInfo: this.$store.state.loginInfo
     }
   },
   computed: {
+    money () {
+      this.$store.commit('handleGetTotal', {
+        bool: false,
+        val: this.orders.total - this.fee
+      })
+      return this.orders.total - this.fee
+    },
+    fee () {
+      let fee = this.orders.total * 0.01
+      if (fee < 2) {
+        fee = 2
+      } else if (fee > 45) {
+        fee = 45
+      }
+      return fee
+    },
     orders () {
       return this.$store.state.orders
+    },
+    verifyLevel () {
+      return !(this.level >= 35 && this.level <= 90)
+    },
+    verifyTel () {
+      return common.utils.checkPhone(this.tel)
+    },
+    verifyQQ () {
+      return common.utils.checkQQ(this.qq)
     }
   },
   methods: {
@@ -90,7 +127,47 @@ export default {
     },
     handleSet () {
       this.$store.commit('handleModal', 'set')
+    },
+    getSigncodeCommon () {
+      axios.signcodeCommon({
+        phone: this.tel
+      }).then(res => {
+        this.verifyImg = `https://gamebox.swjoy.com/signcodeCommon/get?r=${Math.random()}`
+      })
+    },
+    handleRefresh () {
+      this.getSigncodeCommon()
+    },
+    getAlipay () {
+      // 本地模拟
+      if (this.loginInfo.tel) {
+        axios.reflectAccount({
+          accountNum: '18888888888'
+        }).then(res => {
+          if (res) {
+            this.$store.commit('handleAlipay', res.data)
+          }
+        })
+      }
+
+      // 线上
+      /* let obj = this.$route.query
+      if(obj.phone) {
+        axios.reflectAccount({
+          accountNum: this.loginInfo.tel
+        }).then(res => {
+          if (res) {
+            this.$store.commit('handleAlipay', res.data)
+          }
+        })
+      } */
+    },
+    init () {
+      this.getAlipay()
     }
+  },
+  mounted () {
+    this.init()
   }
 }
 </script>

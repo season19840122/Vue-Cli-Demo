@@ -13,7 +13,7 @@
         </div>
         <div class="tbl-three">
           <div class="tbl-wrap">
-            <table>
+            <table class="thead">
               <thead>
                 <tr>
                   <th style="width: 25%;">订单信息</th>
@@ -24,20 +24,45 @@
                   <th style="width: 12%;">操作</th>
                 </tr>
               </thead>
+            </table>
+            <table
+              v-for="(item, index) of details"
+              :key="index"
+              :index="index">
               <tbody>
                 <tr>
-                  <td colspan="3" title="">订单号：1826301496995000001212</td>
-                  <td colspan="3" style="text-align: right; padding-right: 10px;" title="">2018-08-01 12：12 拍卖交易</td>
+                  <td colspan="3" :title="item.orderNumber">订单号：{{ item.orderNumber }}</td>
+                  <td colspan="3" style="text-align: right; padding-right: 10px;" title="">{{ item.addTime }} {{ item.tranType }}</td>
                 </tr>
                 <tr>
-                  <td style="width: 25%; color: #5a5b66;" title="">地下城与勇士广东/广东1区</td>
-                  <td style="width: 15%;" title="">0/18000万金币</td>
-                  <td style="width: 20%;" title="">0/0/300.00元</td>
-                  <td style="width: 15%;" title="">158******73  **雅</td>
-                  <td style="width: 13%;" title="" :class="{ error: true }">交易取消</td>
-                  <td style="width: 12%;"><button class="btn-recycle">再次回收</button></td>
+                  <td style="width: 25%; color: #5a5b66;" title="">{{ item.gameName }}/{{ item.areaName }}/{{ item.serverName }}</td>
+                  <td style="width: 15%;" title="">{{ item.goldRealCnt }}/{{ item.goldOrderCnt }}万金币</td>
+                  <td style="width: 20%;" title="">{{ item.arrivePrice }}/{{ item.realPrice}}/{{ item.orderPrice}}元</td>
+                  <td style="width: 15%;" title="">{{ item.accountNum }}  {{ item.accountName }}</td>
+                  <td style="width: 13%;" title="" class="error" v-if="item.tranStatus === '提现失败'">
+                    <a-tooltip placement="bottom" overlayClassName="tooltip">
+                      <template slot="title">
+                          <span>{{ item.remark || '原因不明' }}</span>
+                      </template>
+                      {{ item.tranStatus }}
+                    </a-tooltip>
+                  </td>
+                  <td style="width: 13%;" title="" v-else>{{ item.tranStatus }}</td>
+                  <td style="width: 12%;" v-if="item.tranStatus === '提现失败'">
+                      <button class="btn-recycle" @click="handleWithdraw(index)">提现</button>
+                  </td>
+                  <td style="width: 12%;" v-else-if="item.tranStatus === '交易中'">
+                    <router-link to="/deal">
+                      <button class="btn-recycle">查看详情</button>
+                    </router-link>
+                  </td>
+                  <td style="width: 12%;" v-else>
+                    <router-link to="/">
+                      <button class="btn-recycle">再次回收</button>
+                    </router-link>
+                  </td>
                 </tr>
-                <tr>
+                <!-- <tr>
                   <td colspan="3" title="">订单号：1826301496995000001212</td>
                   <td colspan="3" style="text-align: right; padding-right: 10px;">2018-08-01 12：12 拍卖交易</td>
                 </tr>
@@ -48,7 +73,7 @@
                   <td style="width: 15%;" title="">158******73  **雅</td>
                   <td style="width: 13%;" title="" :class="{ error: false }">交易取消</td>
                   <td style="width: 12%;"><button class="btn-recycle">再次回收</button></td>
-                </tr>
+                </tr> -->
               </tbody>
             </table>
           </div>
@@ -77,19 +102,81 @@ export default {
     return {
       records: null,
       tabs: ['近一周', '近一月', '全部'],
-      thisIndex: 0,
-      orders: []
+      thisIndex: 0
+    }
+  },
+  computed: {
+    details () {
+      return this.$store.state.details
     }
   },
   methods: {
     handleClick (index) {
       this.thisIndex = index
+      if (index === 0) {
+        this.handleGetOrders(7)
+      } else if (index === 1) {
+        this.handleGetOrders(30)
+      } else {
+        this.handleGetOrders()
+      }
+    },
+    handleGetOrders (selectTime) {
+      if (selectTime) {
+        axios.orderManager({
+          selectTime: selectTime,
+          page: 1,
+          rows: 5
+        }).then(res => {
+          if (res) {
+            if (res.success) {
+              // 订单数据
+              this.$store.commit('handleDetails', res.data.rows)
+              // 分页
+              let pageObj = {}
+              pageObj['total'] = res.data.total
+              pageObj['selectTime'] = selectTime
+              this.$store.commit('handlePage', pageObj)
+            }
+          }
+        })
+      } else {
+        axios.orderManager({
+          page: 1,
+          rows: 5
+        }).then(res => {
+          if (res) {
+            if (res.success) {
+              // 订单数据
+              this.$store.commit('handleDetails', res.data.rows)
+              // 分页
+              let pageObj = {}
+              pageObj['total'] = res.data.total
+              this.$store.commit('handlePage', pageObj)
+            }
+          }
+        })
+      }
+    },
+    handleWithdraw (index) {
+      this.$store.commit('handleWithdraw', this.details[index])
+      this.$store.commit('handleModal', 'withdraw')
+    },
+    init () {
+      this.handleGetOrders(7)
     }
+  },
+  mounted () {
+    this.init()
   }
 }
 </script>
 
 <style scoped lang="scss">
+  .tootip {
+    background:#fff;
+    color:#fff;
+  }
   .manage {
     width: 980px;
     float: right;
@@ -124,7 +211,7 @@ export default {
             padding: 15px 19px;
             table {
               width: 100%;
-              table-layout: fixed;
+              // table-layout: fixed;
               border: 1px solid #e8e9eb;
               tr {
                 &:nth-of-type(odd){
@@ -138,7 +225,6 @@ export default {
                   td {
                     border-bottom: 1px solid #e8e9eb;
                     height: 70px;
-
                   }
                 }
                 th, td {
