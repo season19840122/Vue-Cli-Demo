@@ -14,17 +14,6 @@ const signcodeCommon = data => {
   })
 }
 
-// 登录
-const phoneLogin = data => {
-  return axios({
-    // url: `/api/phoneLogin.json?${data}`,
-    method: 'post',
-    // url: `/api/phoneLogin.json`,
-    url: `/api/phoneLogin`,
-    params: data
-  })
-}
-
 // 下发短信验证码
 const sendPhoneCode = data => {
   return axios({
@@ -38,7 +27,7 @@ const sendPhoneCode = data => {
 const getServers = () => {
   return axios({
     method: 'get',
-    url: `/mock/getServers.json`
+    url: `https://gamebox.swjoy.com/web/recyle/mock/getServers.json`
   })
 }
 
@@ -60,12 +49,41 @@ const orderManager = data => {
   })
 }
 
+// 获取修改支付宝信息
+const reflectAccount = data => {
+  return axios({
+    method: 'post',
+    url: `/accountInfo/reflectAccount`,
+    params: data
+  })
+}
+
+// 提交提现
+const extractSmt = data => {
+  return axios({
+    method: 'post',
+    url: `/goldOrder/extractSmt`,
+    params: data
+  })
+}
+
+// 提交提现
+const doOrder = data => {
+  return axios({
+    method: 'post',
+    url: `/goldOrder/order`,
+    params: data
+  })
+}
+
 // 默认全部导出
 export default {
   signcodeCommon,
-  phoneLogin,
   sendPhoneCode,
   getServers,
   qryUnitPrice,
-  orderManager
+  orderManager,
+  reflectAccount,
+  extractSmt,
+  doOrder
 }

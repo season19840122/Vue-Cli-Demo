@@ -30,22 +30,22 @@ const signcodeCommon = data => {
   })
 }
 
-// 登录
-const phoneLogin = data => {
-  return axios({
-    // url: `/api/phoneLogin.json?${data}`,
-    method: 'get',
-    // url: `/api/phoneLogin.json`,
-    url: `https://gamebox.swjoy.com/phoneLogin`,
-    params: data
-  })
-}
+// 登录，页面跳直接转，无需 AJAX
+// const phoneLogin = data => {
+//   return axios({
+//     // url: `/mock/phoneLogin.json?${data}`,
+//     method: 'get',
+//     // url: `/mock/phoneLogin.json`,
+//     url: `https://gamebox.swjoy.com/phoneLogin`,
+//     params: data
+//   })
+// }
 
 // 下发短信验证码
 const sendPhoneCode = data => {
   return axios({
     method: 'get',
-    url: `/api/sendPhoneCode.json`,
+    url: `/mock/sendPhoneCode.json`,
     params: data
   })
 }
@@ -54,7 +54,7 @@ const sendPhoneCode = data => {
 const getServers = () => {
   return axios({
     method: 'get',
-    url: `/api/getServers.json`
+    url: `/mock/getServers.json`
   })
 }
 
@@ -62,7 +62,7 @@ const getServers = () => {
 const qryUnitPrice = data => {
   return axios({
     method: 'get',
-    url: `/api/qryUnitPrice.json`,
+    url: `/mock/qryUnitPrice.json`,
     params: data
   })
 }
@@ -71,7 +71,7 @@ const qryUnitPrice = data => {
 const orderManager = data => {
   return axios({
     method: 'get',
-    url: `/api/orderManager.json`,
+    url: `/mock/orderManager.json`,
     params: data
   })
 }
@@ -80,7 +80,7 @@ const orderManager = data => {
 const reflectAccount = data => {
   return axios({
     method: 'get',
-    url: `/api/reflectAccount.json`,
+    url: `/mock/reflectAccount.json`,
     params: data
   })
 }
@@ -89,7 +89,16 @@ const reflectAccount = data => {
 const extractSmt = data => {
   return axios({
     method: 'get',
-    url: `/api/extractSmt.json`,
+    url: `/mock/extractSmt.json`,
+    params: data
+  })
+}
+
+// 提交提现
+const doOrder = data => {
+  return axios({
+    method: 'get',
+    url: `/mock/doOrder.json`,
     params: data
   })
 }
@@ -97,11 +106,11 @@ const extractSmt = data => {
 // 默认全部导出
 export default {
   signcodeCommon,
-  phoneLogin,
   sendPhoneCode,
   getServers,
   qryUnitPrice,
   orderManager,
   reflectAccount,
-  extractSmt
+  extractSmt,
+  doOrder
 }

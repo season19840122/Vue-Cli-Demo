@@ -75,10 +75,18 @@ export default {
           bool: true,
           val: this.unitPrice * this.count
         })
-        return this.unitPrice * this.count
+        this.$store.commit('handleCanJump', true)
+        // return this.unitPrice * this.count
       } else {
-        return '-'
+        // 传入总计获得
+        this.$store.commit('handleGetTotal', {
+          bool: true,
+          val: '-'
+        })
+        this.$store.commit('handleCanJump', false)
       }
+
+      return this.$store.state.total
     },
     isLogin () {
       return this.$store.state.loginInfo.isLogin
@@ -132,10 +140,11 @@ export default {
             servers: this.servers,
             count: this.count,
             tranType: this.tranType,
-            total: this.total,
-            tel: this.tel
+            priceValues: this.unitPrice,
+            goldOrderCnt: this.count,
+            total: this.total // 订单金额（总计获得）
           })
-          this.$store.commit('handleCanJump', true)
+
           this.$router.push({ path: 'order' })
           // reset
           this.$store.commit('handleCanJump', false)

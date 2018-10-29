@@ -26,7 +26,8 @@ export default {
         // console.log(event.data);
         if (event.origin !== 'http://zhifu.17uoo.com') return
         if (event.data === 'success') {
-          alert('Success')
+          // check 弹层
+          this.$store.commit('handleModal', 'check')
         } else {
           console.log(event.data)
         }

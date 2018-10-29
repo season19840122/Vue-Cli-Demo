@@ -19,13 +19,13 @@
             <span class="price">
               总计获得：<strong class="big">{{ this.$store.state.total }}</strong>元
             </span>
-            <button @click="handleSale" class="btn-sale">立即出售</button>
+            <button @click="handleSale" :class="{disable: !canJump}" class="btn-sale">立即出售</button>
           </div>
-          <div class="price-wrap" v-else>
+          <div class="price-wrap" v-else-if="isOrder">
             <span class="price">
               总计获得：<strong class="big">{{ this.$store.state.money }}</strong>元
             </span>
-            <button @click="handleRecyle" class="btn-sale">确认回收</button>
+            <button @click="handleRecyle" class="btn-sale" :class="{disable: !canJump}">确认回收</button>
           </div>
         </div>
       </div>
@@ -103,6 +103,12 @@ export default {
     },
     isIndex(){
       return this.$route.path === '/' 
+    },
+    isOrder(){
+      return this.$route.path === '/order' 
+    },
+    canJump(){
+      return this.$store.state.canJump
     }
   },
   methods: {
@@ -241,6 +247,10 @@ export default {
               font-weight: bold;
               background: #ffd200;
               color: #212537;
+              &.disable {
+                color: #b3b3ba;
+                background: #eeeeee;
+              }
             }
           }
         }

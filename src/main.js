@@ -12,8 +12,8 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 // 独立成一个文件，或者放在 common 里
-// import axios from 'scripts/axios/interface' // 线上
-import axios from 'scripts/axios/json' // 本地
+// import axios from 'scripts/axios/json' // 本地
+import axios from 'scripts/axios/interface' // 线上
 import common from 'scripts/common'
 import 'scripts/vue-filter'
 

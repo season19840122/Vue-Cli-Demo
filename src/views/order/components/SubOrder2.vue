@@ -39,7 +39,7 @@
           </div>
           <div class="formitem">
             <label for="ipt-tel" class="lbl">联系手机</label>
-            <input type="text" class="ipt-text" id="ipt-tel" v-model="orders.tel || null">
+            <input type="text" class="ipt-text" id="ipt-tel" :value="tel|num" @keyup="handleTelChange" @blur="handleBlur">
             <span class="c2" v-show="verifyTel">请输入正确的手机号！</span>
           </div>
           <div class="formitem">
@@ -49,9 +49,9 @@
           </div>
           <div class="formitem">
             <label for="ipt-qq" class="lbl">验证码</label>
-            <input name="" id="ipt-name" class="ipt-text s" v-model.trim="verifycode" placeholder="请输入验证码">
+            <input name="" id="ipt-name" class="ipt-text s" v-model.trim="code" placeholder="请输入验证码">
             <img class="verify s" :src="verifyImg" alt="" @click="handleRefresh" style="background: #fff">
-            <span class="c2">请输入验证码！</span>
+            <span class="c2" v-show="verifyCode">请输入验证码！</span>
           </div>
         </div>
         <div class="formitem">
@@ -72,7 +72,7 @@
     <div class="btn-wrap">
       <p class="p2">实际到账金额<span class="c2"><strong>{{ money }}</strong>元</span></p>
       <p class="p3">其中提现手续费为{{ fee }}元</p>
-      <button @click="handleClick" class="btn-confirm">确认回收</button>
+      <button @click="handleRecyle" class="btn-confirm">确认回收</button>
     </div>
   </div>
 </template>
@@ -86,9 +86,11 @@ export default {
       role: null,
       level: null,
       qq: null,
-      verifyImg: null,
-      verifycode: null,
-      loginInfo: this.$store.state.loginInfo
+      verifyImg: `https://gamebox.swjoy.com/signcodeCommon/get`,
+      code: null,
+      verifyTel: false,
+      loginInfo: this.$store.state.loginInfo,
+      tel: this.$store.state.loginInfo.tel
     }
   },
   computed: {
@@ -114,16 +116,59 @@ export default {
     verifyLevel () {
       return !(this.level >= 35 && this.level <= 90)
     },
-    verifyTel () {
-      return common.utils.checkPhone(this.tel)
-    },
     verifyQQ () {
       return common.utils.checkQQ(this.qq)
+    },
+    verifyCode () {
+      return common.utils.checkNull(this.code)
+    },
+    alipay () {
+      return this.$store.state.alipay
     }
   },
   methods: {
-    handleClick () {
-      this.$router.push({ path: 'deal' })
+    handleBlur () {
+      var utils = common.utils
+      if (!utils.checkPhone(this.tel)) {
+        this.verifyTel = false
+      } else {
+        this.verifyTel = true
+      }
+    },
+    // 手机号 keyup 事件
+    handleTelChange (e) {
+      this.tel = e.target.value
+      this.$forceUpdate() // 这里必须有
+    },
+    doOrder () {
+      axios.doOrder({
+        serverName: this.orders.servers[1],
+        areaName: this.orders.servers[0],
+        tranType: this.orders.tranType,
+        priceValues: this.orders.priceValues,
+        goldOrderCnt: this.orders.goldOrderCnt,
+        orderPrice: this.orders.total,
+        gameName: '地下城与勇士',
+        roleName: '鬼剑士1',
+        roleLevel: this.role,
+        contactPhone: '188888888888',
+        qq: this.qq,
+        accountType: '支付宝',
+        accountName: this.alipay.accountNum,
+        accountNum: this.alipay.accountName,
+        arrivePrice: this.money,
+        putForward: this.fee
+      })
+        .then(res => {
+          if (res && res.success) {
+            this.$router.push({ path: 'deal' })
+          }
+        })
+    },
+    handleRecyle () {
+      if (this.role && !this.verifyLevel && !this.verifyTel && !this.verifyQQ && this.code) {
+        this.doOrder()
+      }
     },
     handleSet () {
       this.$store.commit('handleModal', 'set')
@@ -131,14 +176,21 @@ export default {
     getSigncodeCommon () {
       axios.signcodeCommon({
         phone: this.tel
-      }).then(res => {
-        this.verifyImg = `https://gamebox.swjoy.com/signcodeCommon/get?r=${Math.random()}`
       })
+        .then(res => {
+          this.verifyImg = `https://gamebox.swjoy.com/signcodeCommon/get?r=${Math.random()}`
+        })
     },
     handleRefresh () {
       this.getSigncodeCommon()
     },
     getAlipay () {
+      this.$store.commit('handleAlipay')
+    },
+    saveAlipay () {
+      this.$store.commit('handleAlipay', this.alipay)
+    },
+    /* getAlipay () {
       // 本地模拟
       if (this.loginInfo.tel) {
         axios.reflectAccount({
@@ -160,8 +212,8 @@ export default {
             this.$store.commit('handleAlipay', res.data)
           }
         })
-      } */
-    },
+      }
+    }, */
     init () {
       this.getAlipay()
     }

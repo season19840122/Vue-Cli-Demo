@@ -13,6 +13,7 @@ export default new Vuex.Store({
     currentModal: null,
     total: '-',
     money: null,
+    // disable: false,
     canJump: false,
     orders: stores.get('orders') || {},
     withdraw: stores.get('withdraw') || {},
@@ -54,6 +55,9 @@ export default new Vuex.Store({
     handleCanJump (state, bool) {
       state.canJump = bool
     },
+    // handleCanJump (state, bool) {
+    //   state.canJump = bool
+    // },
     handleOrders (state, objOrders) {
       state.orders = objOrders
       try {
@@ -83,6 +87,12 @@ export default new Vuex.Store({
             if (res && res.success) {
               state.alipay = alipay
               app.$message.success('保存成功')
+
+              try {
+                stores.set('alipay', state.alipay)
+              } catch (error) {
+                console.log(error)
+              }
             } else {
               app.$message.error(res.message)
             }
@@ -98,14 +108,6 @@ export default new Vuex.Store({
             }
           })
       }
-
-      promiss.then(() => {
-        try {
-          stores.set('alipay', state.alipay)
-        } catch (error) {
-          console.log(error)
-        }
-      })
     },
     handlePage (state, page) {
       state.page = page

@@ -1,29 +1,23 @@
 const path = require('path')
 
 module.exports = {
-  baseUrl: process.env.NODE_ENV === 'production'
-    ? '/'
-    : '/',
-  // devServer: {
-  //   proxy: 'https://gamebox.swjoy.com'
-  // },
+  baseUrl: process.env.NODE_ENV === 'production' ? 'https://static.huoma.cn/gamebox_web/dnfhs/' : '/',
   devServer: {
     // port: 8001
     historyApiFallback: true,
-    // proxy: 'https://gamebox.swjoy.com', // 线上
-    proxy: { // 本地，设置这个参数可以避免跨域
-      '/api': { // 这个表示 target 下的路径，如果后端路径没有叫这个建议直接设置 proxy: 'https://gamebox.swjoy.com'
-        target: 'http://localhost:8080',
-        pathRewrite: {
-          '^/api': '/mock' // rewrite path
-        }
-        // ,ws: true,
-        // changeOrigin: true
-      }
-    }
+    proxy: 'https://gamebox.swjoy.com/' // 线上
+    // proxy: 'http://127.0.0.1:8080/' // 线上
+    // proxy: { // 本地，设置这个参数可以避免跨域
+    //   '/api': { // 这个表示 target 下的路径，如果后端路径没有叫这个建议直接设置 proxy: 'https://gamebox.swjoy.com'
+    //     target: 'http://127.0.0.1:8080',
+    //     pathRewrite: {
+    //       '^/api': '/mock' // rewrite path
+    //     }
+    //     // ,ws: true,
+    //     // changeOrigin: true
+    //   }
+    // }
   },
-  productionSourceMap: false,
-  filenameHashing: false,
   pages: {
     index: {
       // page 的入口
@@ -66,6 +60,20 @@ module.exports = {
     const types = ['vue-modules', 'vue', 'normal-modules', 'normal']
     types.forEach(type => addStyleResource(config.module.rule('scss').oneOf(type)))
   },
+  // css: { // 配置高于 chainWebpack 中关于 css loader 的配置
+  //   modules: true, // 是否开启支持 ‘foo.module.css’ 样式
+  //   extract: true, // 是否使用 css 分离插件 ExtractTextPlugin，采用独立样式文件载入，不采用 <style> 方式内联至 html 文件中
+  //   sourceMap: false, // 是否在构建样式地图，false 将提高构建速度
+  //   loaderOptions: { // css 预设器配置项
+  //     css: {
+  //       localIdentName: '[name]',
+  //       camelCase: 'only'
+  //     },
+  //     stylus: {}
+  //   }
+  // },
+  productionSourceMap: false,
+  filenameHashing: false,
   // 配置 webpack
   configureWebpack: {
     resolve: {

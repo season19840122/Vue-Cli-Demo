@@ -32,14 +32,19 @@ export default {
   methods: {
     getLogin () {
       // 本地模拟
-      this.$store.commit('handleLogin', {
-        isLogin: true,
-        nickname: '火荣',
-        tel: '18888888888'
-      })
+      // this.$store.commit('handleLogin', {
+      //   isLogin: true,
+      //   nickname: '火荣',
+      //   tel: '18888888888'
+      // })
 
       // 线上
-      /* let obj = this.$route.query
+      var params = new URLSearchParams(document.location.search)
+      // console.log(params.get('phone'))
+      let obj = {}
+      obj.nickName = params.get('nickName')
+      obj.phone = params.get('phone')
+      // console.log(obj)
       if (obj.nickName) {
         this.$store.commit('handleLogin', {
           isLogin: true,
@@ -51,7 +56,7 @@ export default {
         this.$router.push({
           path: redirect
         })
-      } */
+      }
     },
     init () {
       this.getLogin()

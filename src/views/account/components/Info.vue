@@ -17,11 +17,11 @@
         </div>
         <div class="formitem">
           <label for="ipt-account" class="lbl">支付宝账户</label>
-          <input type="text" name="" id="ipt-account" class="ipt-text" v-model="alipay.accountNum">
+          <input type="text" name="" id="ipt-account" class="ipt-text" :value="alipay.accountNum">
         </div>
         <div class="formitem">
           <label for="ipt-name" class="lbl">支付宝姓名</label>
-          <input type="text" name="" id="ipt-name" class="ipt-text" v-model="alipay.accountName">
+          <input type="text" name="" id="ipt-name" class="ipt-text" :value="alipay.accountName">
         </div>
         <div class="formitem">
           <label for="" class="lbl"></label>

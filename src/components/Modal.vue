@@ -42,11 +42,11 @@
           </div>
           <div class="formitem">
             <label for="ipt-account" class="lbl">支付宝账户</label>
-            <input type="text" name="" id="ipt-account" class="ipt-text m" placeholder="" v-model="withdraw.accountNum">
+            <input type="text" name="" id="ipt-account" class="ipt-text m" placeholder="" v-model="alipay.accountNum">
           </div>
           <div class="formitem">
             <label for="ipt-name" class="lbl">支付宝姓名</label>
-            <input type="text" name="" id="ipt-name" class="ipt-text m" placeholder="" v-model="withdraw.accountName">
+            <input type="text" name="" id="ipt-name" class="ipt-text m" placeholder="" v-model="alipay.accountName">
           </div>
           <div class="formitem">
             <button class="btn-verify m" @click="saveAlipay">保存</button>
@@ -61,31 +61,31 @@
       <div class="contents">
         <div class="form-wrap">
           <div class="formitem">
-            <label for="ipt-tel" class="lbl">订单号</label>
+            <label class="lbl">订单号</label>
             <p class="p2">{{ withdraw.orderNumber }}</p>
           </div>
           <div class="formitem">
-            <label for="ipt-tel" class="lbl">游戏区服</label>
+            <label class="lbl">游戏区服</label>
             <p class="p2">{{ withdraw.gameName }}/{{ withdraw.areaName }}/{{ withdraw.serverName }}</p>
           </div>
           <div class="formitem">
-            <label for="ipt-tel" class="lbl">成交数量</label>
+            <label class="lbl">成交数量</label>
             <p class="p2"><span class="c1">{{ withdraw.goldRealCnt }}</span>万金币</p>
           </div>
           <div class="formitem">
-            <label for="ipt-tel" class="lbl">成交金额</label>
+            <label class="lbl">成交金额</label>
             <p class="p2">{{ withdraw.goldRealCnt }}元</p>
           </div>
           <div class="formitem">
-            <label for="ipt-tel" class="lbl">手续费</label>
+            <label class="lbl">手续费</label>
             <p class="p2">{{ withdraw.commissionPrice }}元</p>
           </div>
           <div class="formitem">
-            <label for="ipt-tel" class="lbl">到账金额</label>
+            <label class="lbl">到账金额</label>
             <p class="p2"><span class="c1">{{ withdraw.arrivePrice }}</span>元</p>
           </div>
           <div class="formitem" style="margin-bottom: 10px;">
-            <label for="ipt-tel" class="lbl">提现方式</label>
+            <label class="lbl">提现方式</label>
             <p class="p2"><i class="i-alipay"></i>支付宝</p>
           </div>
           <div class="formitem" style="margin-bottom: 20px;">
@@ -110,7 +110,7 @@
         <p class="p3">订单交易已完成，请前往订单列表查看。</p>
       </div>
       <div class="btn-wrap">
-        <button class="btn-check m">前往查看</button>
+        <button class="btn-check m" @click="handleManage">前往查看</button>
       </div>
     </div>
   </div>
@@ -146,11 +146,10 @@ export default {
   methods: {
     getSigncodeCommon () {
       axios.signcodeCommon({
-        phone: this.tel
+        phone: this.tel,
+        type: 2
       }).then(res => {
-        this.verifyImg = `http://www.17uoo.com/Aspx/Common/ValidateImg.aspx?r=${Math.random()}`
-      }).catch(error => {
-        console.log(error)
+        this.verifyImg = `https://gamebox.swjoy.com/signcodeCommon/get?r=${Math.random()}`
       })
     },
     getSendPhoneCode () {
@@ -169,29 +168,29 @@ export default {
         numCode: this.sms,
         url: 'https://localhost:8080'
       })
-      .then(res => {
-      // console.log(res)
-      // 使用箭头函数可以绑定 this 到 vm 实例
-        if (res) {
-          if (res.success) {
-            this.$store.commit('handleLogin', {
-              isLogin: true,
-              nickname: res.data.nickname
-            })
-            this.$store.commit('handleModal', null)
-            let redirect = decodeURIComponent(this.$route.query.redirect || '/')
-            this.$router.push({
-              path: redirect
-            })
+        .then(res => {
+          console.log(res)
+          // 使用箭头函数可以绑定 this 到 vm 实例
+          if (res) {
+            if (res.success) {
+              this.$store.commit('handleLogin', {
+                isLogin: true,
+                nickname: res.data.nickname
+              })
+              this.$store.commit('handleModal', null)
+              let redirect = decodeURIComponent(this.$route.query.redirect || '/')
+              this.$router.push({
+                path: redirect
+              })
+            }
           }
-        }
-      }) */
-
-      document.location.href = `https://gamebox.swjoy.com/phoneLogin?phone=${this.tel}&numCode=${this.sms}&url=http://localhost:8080`
-    },
-    clickCallback (page) {
-      console.log(page)
-      // $('.guess-wrap>ul').eq(pageNum-1).show().siblings('ul').hide();
+        }) */
+      // 正式
+      let href = `https://gamebox.swjoy.com/phoneLogin?phone=${this.tel}&numCode=${this.sms}&url=https://gamebox.swjoy.com/#/${this.$route.path}`
+      // 本地
+      // let href = `http://localhost:8080/#/${this.$route.path}?nickName=火荣&phone=18888888888`
+      // console.log(href)
+      document.location.href = href
     },
     closeModal () {
       this.mask = false
@@ -202,7 +201,7 @@ export default {
       if (!utils.checkPhone(this.tel)) {
         this.error = null
         this.show = true
-        this.verifyImg = `http://www.17uoo.com/Aspx/Common/ValidateImg.aspx?r=${Math.random()}`
+        this.verifyImg = `https://gamebox.swjoy.com/signcodeCommon/get`
       } else {
         this.error = utils.checkPhone(this.tel)
         this.show = false
@@ -256,6 +255,7 @@ export default {
     },
     saveAlipay () {
       this.$store.commit('handleAlipay', this.alipay)
+      this.closeModal()
     },
     handleWithdraw (orderNumber) {
       axios.extractSmt({
@@ -271,9 +271,11 @@ export default {
           }
         }
       })
+    },
+    handleManage () {
+      this.$router.push({ path: '/account/manage' })
+      this.$store.commit('handleModal', null)
     }
-  },
-  mounted () {
   }
 }
 </script>
