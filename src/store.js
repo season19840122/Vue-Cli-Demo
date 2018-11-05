@@ -101,7 +101,7 @@ export default new Vuex.Store({
         obj = {
           accountNum: state.loginInfo.tel
         }
-        promiss = axios.reflectAccount(obj)
+        promiss = axios.getAccount(obj)
           .then(res => {
             if (res && res.success) {
               state.alipay = res.data

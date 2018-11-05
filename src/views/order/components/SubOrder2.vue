@@ -86,7 +86,7 @@ export default {
       role: null,
       level: null,
       qq: null,
-      verifyImg: `https://gamebox.swjoy.com/signcodeCommon/get`,
+      verifyImg: null,
       code: null,
       verifyTel: false,
       loginInfo: this.$store.state.loginInfo,
@@ -149,19 +149,22 @@ export default {
         goldOrderCnt: this.orders.goldOrderCnt,
         orderPrice: this.orders.total,
         gameName: '地下城与勇士',
-        roleName: '鬼剑士1',
-        roleLevel: this.role,
-        contactPhone: '188888888888',
+        roleName: this.role,
+        roleLevel: this.level,
+        contactPhone: this.tel,
         qq: this.qq,
         accountType: '支付宝',
         accountName: this.alipay.accountNum,
         accountNum: this.alipay.accountName,
         arrivePrice: this.money,
-        putForward: this.fee
+        putForward: this.fee,
+        code: this.code
       })
         .then(res => {
           if (res && res.success) {
             this.$router.push({ path: 'deal' })
+          } else {
+            this.$message.error(res.message)
           }
         })
     },
@@ -174,15 +177,13 @@ export default {
       this.$store.commit('handleModal', 'set')
     },
     getSigncodeCommon () {
-      axios.signcodeCommon({
-        phone: this.tel
-      })
-        .then(res => {
-          this.verifyImg = `https://gamebox.swjoy.com/signcodeCommon/get?r=${Math.random()}`
-        })
+      this.verifyImg = `https://gamebox.swjoy.com/signcodeCommon/get?phone=${this.tel}&type=2&r=${Math.random()}`
     },
     handleRefresh () {
-      this.getSigncodeCommon()
+      var utils = common.utils
+      if (!utils.checkPhone(this.tel)) {
+        this.getSigncodeCommon()
+      }
     },
     getAlipay () {
       this.$store.commit('handleAlipay')
@@ -220,6 +221,7 @@ export default {
   },
   mounted () {
     this.init()
+    this.getSigncodeCommon()
   }
 }
 </script>

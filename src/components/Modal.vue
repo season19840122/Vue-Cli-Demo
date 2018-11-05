@@ -145,17 +145,12 @@ export default {
   },
   methods: {
     getSigncodeCommon () {
-      axios.signcodeCommon({
-        phone: this.tel,
-        type: 2
-      }).then(res => {
-        this.verifyImg = `https://gamebox.swjoy.com/signcodeCommon/get?r=${Math.random()}`
-      })
+      this.verifyImg = `https://gamebox.swjoy.com/signcodeCommon/get?phone=${this.tel}&type=1&r=${Math.random()}`
     },
     getSendPhoneCode () {
       axios.sendPhoneCode({
         phone: this.tel,
-        picCode: this.tel
+        picCode: this.verifycode
       }).then(res => {
         // countdown
       }).catch(error => {
@@ -163,34 +158,27 @@ export default {
       })
     },
     getPhoneLogin () {
-      /* axios.phoneLogin({
+      axios.phoneLogin({
         phone: this.tel,
         numCode: this.sms,
-        url: 'https://localhost:8080'
+        url: `https://gamebox.swjoy.com/web/recyle${this.$route.path}` // 正式
+        // url: `http://localhost:8080//#/${this.$route.path}` // 本地
       })
         .then(res => {
           console.log(res)
           // 使用箭头函数可以绑定 this 到 vm 实例
-          if (res) {
-            if (res.success) {
-              this.$store.commit('handleLogin', {
-                isLogin: true,
-                nickname: res.data.nickname
-              })
-              this.$store.commit('handleModal', null)
-              let redirect = decodeURIComponent(this.$route.query.redirect || '/')
-              this.$router.push({
-                path: redirect
-              })
-            }
+          if (res && res.success) {
+            // 正式
+            let href = res.data
+            // let href = `https://gamebox.swjoy.com/phoneLogin?phone=${this.tel}&numCode=${this.sms}&url=http://localhost:8080/#/${this.$route.path}`
+            // 本地
+            // let href = `http://localhost:8080/#/${this.$route.path}?nickName=火荣&phone=18888888888`
+            // console.log(href)
+            document.location.href = href
+          } else {
+            this.$message.error(res.message)
           }
-        }) */
-      // 正式
-      let href = `https://gamebox.swjoy.com/phoneLogin?phone=${this.tel}&numCode=${this.sms}&url=https://gamebox.swjoy.com/#/${this.$route.path}`
-      // 本地
-      // let href = `http://localhost:8080/#/${this.$route.path}?nickName=火荣&phone=18888888888`
-      // console.log(href)
-      document.location.href = href
+        })
     },
     closeModal () {
       this.mask = false
@@ -201,7 +189,7 @@ export default {
       if (!utils.checkPhone(this.tel)) {
         this.error = null
         this.show = true
-        this.verifyImg = `https://gamebox.swjoy.com/signcodeCommon/get`
+        this.getSigncodeCommon()
       } else {
         this.error = utils.checkPhone(this.tel)
         this.show = false
@@ -333,7 +321,7 @@ export default {
       cursor: pointer;
     }
     .caption {
-      margin-top: 60px;
+      margin-top: 50px;
       color: #212537;
       font-size: 24px;
       font-weight: normal;

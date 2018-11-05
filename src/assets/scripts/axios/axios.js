@@ -42,6 +42,12 @@ export default function $axios (options) {
             config.data = qs.stringify(config.data);
           }
         } */
+        config.headers = {
+          // 'Content-Type': 'application/x-www-form-urlencoded',
+          // 'X-Requested-With': 'XMLHttpRequest',
+          // 'Content-Type': 'application/json'
+          'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+        }
         // 判断 token
         if (store.state.token) {
           config.headers.Authorization = `${store.state.token}`
@@ -78,11 +84,20 @@ export default function $axios (options) {
     instance.interceptors.response.use(
       response => {
         let data
-        // IE9 时 response.data 是 undefined，因此需要使用 response.request.responseText( Stringify 后的字符串)
-        if (response.data === undefined) {
-          data = JSON.parse(response.request.responseText)
-        } else {
-          data = JSON.parse(response.data)
+        /**
+         * 返回是 JSON 对象时按 JSON 格式去解析
+         * 否则，直接返回 data 值
+         * 有个小问题，当是 '123', '{}', 'true', 'foo', '[1, 5, "false"]', 'null'。JSON.parse 还是不报错
+         *  */
+        try {
+          // IE9 时 response.data 是 undefined，因此需要使用 response.request.responseText( Stringify 后的字符串)
+          if (response.data === undefined) {
+            data = JSON.parse(response.request.responseText)
+          } else {
+            data = JSON.parse(response.data)
+          }
+        } catch (e) {
+          return response.data
         }
 
         // 根据返回的 code 值来做不同的处理

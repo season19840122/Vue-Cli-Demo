@@ -48,6 +48,7 @@
 </template>
 
 <script>
+import {serverOpt} from '@/getServers.js'
 export default {
   name: 'suborder1',
   data () {
@@ -106,11 +107,15 @@ export default {
       this.getServers()
     },
     getServers () {
-      axios.getServers()
-        .then(res => {
-          // console.log(this)
-          if (res) this.options = res
-        })
+      // axios.getServers()
+      //   .then(res => {
+      //     // console.log(this)
+      //     console.log(res)
+      //     if (res) this.options = res
+
+      //   })
+      this.options = serverOpt;
+    
     },
     getQryUnitPrice (value) {
       axios.qryUnitPrice({

@@ -8,8 +8,18 @@ import axios from './axios'
 // 图形验证码
 const signcodeCommon = data => {
   return axios({
-    method: 'post',
+    method: 'get',
     url: '/signcodeCommon/get',
+    params: data
+  })
+}
+
+// 登录
+const phoneLogin = data => {
+  return axios({
+    // url: `/mock/phoneLogin.json?${data}`,
+    method: 'get',
+    url: `https://gamebox.swjoy.com/phoneLogin`,
     params: data
   })
 }
@@ -27,7 +37,8 @@ const sendPhoneCode = data => {
 const getServers = () => {
   return axios({
     method: 'get',
-    url: `https://gamebox.swjoy.com/web/recyle/mock/getServers.json`
+    // url: `https://gamebox.swjoy.com/web/recyle/mock/getServers.json`
+    url: `/gamebox_web/dnfhs/mock/getServers.json`
   })
 }
 
@@ -49,11 +60,20 @@ const orderManager = data => {
   })
 }
 
-// 获取修改支付宝信息
+// 修改支付宝信息
 const reflectAccount = data => {
   return axios({
     method: 'post',
     url: `/accountInfo/reflectAccount`,
+    params: data
+  })
+}
+
+// 获取支付宝信息
+const getAccount = data => {
+  return axios({
+    method: 'post',
+    url: `/accountInfo/getAccount`,
     params: data
   })
 }
@@ -79,11 +99,13 @@ const doOrder = data => {
 // 默认全部导出
 export default {
   signcodeCommon,
+  phoneLogin,
   sendPhoneCode,
   getServers,
   qryUnitPrice,
   orderManager,
   reflectAccount,
+  getAccount,
   extractSmt,
   doOrder
 }

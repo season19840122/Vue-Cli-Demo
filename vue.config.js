@@ -2,6 +2,7 @@ const path = require('path')
 
 module.exports = {
   baseUrl: process.env.NODE_ENV === 'production' ? 'https://static.huoma.cn/gamebox_web/dnfhs/' : '/',
+  // assetsDir: 'assets',
   devServer: {
     // port: 8001
     historyApiFallback: true,
@@ -55,25 +56,25 @@ module.exports = {
   //     ]
   //   }
   // },
+  productionSourceMap: false,
+  filenameHashing: false,
   // 每个组件都载入 mixin
   chainWebpack: config => {
     const types = ['vue-modules', 'vue', 'normal-modules', 'normal']
     types.forEach(type => addStyleResource(config.module.rule('scss').oneOf(type)))
   },
-  // css: { // 配置高于 chainWebpack 中关于 css loader 的配置
-  //   modules: true, // 是否开启支持 ‘foo.module.css’ 样式
-  //   extract: true, // 是否使用 css 分离插件 ExtractTextPlugin，采用独立样式文件载入，不采用 <style> 方式内联至 html 文件中
-  //   sourceMap: false, // 是否在构建样式地图，false 将提高构建速度
-  //   loaderOptions: { // css 预设器配置项
-  //     css: {
-  //       localIdentName: '[name]',
-  //       camelCase: 'only'
-  //     },
-  //     stylus: {}
-  //   }
-  // },
-  productionSourceMap: false,
-  filenameHashing: false,
+  css: { // 配置高于 chainWebpack 中关于 css loader 的配置
+    // modules: true, // 是否开启支持 ‘foo.module.css’ 样式
+    // extract: true, // 是否使用 css 分离插件 ExtractTextPlugin，采用独立样式文件载入，不采用 <style> 方式内联至 html 文件中
+    sourceMap: false, // 是否在构建样式地图，false 将提高构建速度
+    loaderOptions: { // css 预设器配置项
+      css: {
+        localIdentName: '[name]',
+        camelCase: 'only'
+      },
+      stylus: {}
+    }
+  },
   // 配置 webpack
   configureWebpack: {
     resolve: {
